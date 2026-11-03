@@ -1,0 +1,111 @@
+{
+  "config": {
+    "arch": "efficientnet_b0",
+    "epochs": 8,
+    "batch_size": 64,
+    "lr": 0.0003,
+    "weight_decay": 0.05,
+    "warmup_frac": 0.05,
+    "workers": 6,
+    "amp": "bf16",
+    "seed": 0,
+    "max_steps": 0,
+    "pool_alpha": 0.5,
+    "pretrained": true,
+    "aug": {
+      "size": 224,
+      "p_rescale": 0.3,
+      "scale_range": [
+        0.5,
+        0.95
+      ],
+      "p_blur": 0.2,
+      "blur_sigma": [
+        0.1,
+        1.5
+      ],
+      "p_jpeg": 0.5,
+      "jpeg_quality": [
+        60,
+        100
+      ],
+      "p_flip": 0.5
+    }
+  },
+  "history": [
+    {
+      "epoch": 0,
+      "step": 236,
+      "train_loss": 1.493996145361561,
+      "val_loss": 0.7786043882369995,
+      "val_auc": 0.8257266011838519,
+      "val_acc": 0.7389557957649231,
+      "elapsed_s": 220.1
+    },
+    {
+      "epoch": 1,
+      "step": 472,
+      "train_loss": 0.475139262849244,
+      "val_loss": 0.6467402577400208,
+      "val_auc": 0.8868531354332996,
+      "val_acc": 0.8057228922843933,
+      "elapsed_s": 413.3
+    },
+    {
+      "epoch": 2,
+      "step": 708,
+      "train_loss": 0.2887254652519852,
+      "val_loss": 0.5223100781440735,
+      "val_auc": 0.9108804696698439,
+      "val_acc": 0.8313252925872803,
+      "elapsed_s": 603.2
+    },
+    {
+      "epoch": 3,
+      "step": 944,
+      "train_loss": 0.19953505320758638,
+      "val_loss": 0.5129843354225159,
+      "val_auc": 0.9175552612054645,
+      "val_acc": 0.8403614163398743,
+      "elapsed_s": 799.5
+    },
+    {
+      "epoch": 4,
+      "step": 1180,
+      "train_loss": 0.13372356722415504,
+      "val_loss": 0.5233403444290161,
+      "val_auc": 0.9261634892985597,
+      "val_acc": 0.8343373537063599,
+      "elapsed_s": 996.0
+    },
+    {
+      "epoch": 5,
+      "step": 1416,
+      "train_loss": 0.10331854017419835,
+      "val_loss": 0.523775041103363,
+      "val_auc": 0.9305313623973807,
+      "val_acc": 0.8428714871406555,
+      "elapsed_s": 1203.8
+    },
+    {
+      "epoch": 6,
+      "step": 1652,
+      "train_loss": 0.08158945409833628,
+      "val_loss": 0.521827757358551,
+      "val_auc": 0.9302511249818551,
+      "val_acc": 0.8468875288963318,
+      "elapsed_s": 1425.5
+    },
+    {
+      "epoch": 7,
+      "step": 1888,
+      "train_loss": 0.0712397092977002,
+      "val_loss": 0.5184851884841919,
+      "val_auc": 0.9305752124965727,
+      "val_acc": 0.8433734774589539,
+      "elapsed_s": 1635.9
+    }
+  ],
+  "steps_per_epoch": 236,
+  "weights": "cnn_efficientnet_b0.safetensors"
+}

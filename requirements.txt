@@ -1,0 +1,12 @@
+# Runtime dependencies for the TruthLens app (Hugging Face Spaces, CPU).
+# Training/evaluation deps live in requirements-train.txt.
+# CPU-only PyTorch wheels: much smaller and faster to install than the default CUDA build.
+--extra-index-url https://download.pytorch.org/whl/cpu
+gradio==6.31.0
+torch==2.15.0
+torchvision==0.29.2
+open_clip_torch==3.3.0
+timm==1.0.30
+safetensors==0.8.0
+numpy==2.4.6
+pillow==12.3.0

@@ -1,0 +1,155 @@
+{
+  "device": {
+    "torch": "2.15.0",
+    "mps": true,
+    "blas": "accelerate"
+  },
+  "clip": [
+    {
+      "backbone": "clip_vitb32",
+      "arch": "ViT-B-32",
+      "pretrained": "openai",
+      "params_M": 87.8,
+      "weights_MB_fp32": 335.0,
+      "gflops_224": 8.8,
+      "cpu_threads": 2,
+      "cpu_latency": {
+        "median_ms": 26.9,
+        "min_ms": 26.6
+      },
+      "cpu_preprocess_ms": 3.3,
+      "mps_img_per_s_fp32": 98.0,
+      "mps_img_per_s_fp16": 274.3,
+      "mps_fp32_vs_cpu_fp32_min_cos": 1.0,
+      "mps_fp16_vs_cpu_fp32_min_cos": 0.999996
+    },
+    {
+      "backbone": "clip_vitb16",
+      "arch": "ViT-B-16",
+      "pretrained": "openai",
+      "params_M": 86.2,
+      "weights_MB_fp32": 329.0,
+      "gflops_224": 35.1,
+      "cpu_threads": 2,
+      "cpu_latency": {
+        "median_ms": 115.0,
+        "min_ms": 92.4
+      },
+      "cpu_preprocess_ms": 4.7,
+      "mps_img_per_s_fp32": 28.9,
+      "mps_img_per_s_fp16": 84.8,
+      "mps_fp32_vs_cpu_fp32_min_cos": 1.0,
+      "mps_fp16_vs_cpu_fp32_min_cos": 0.999996
+    },
+    {
+      "backbone": "clip_vitl14",
+      "arch": "ViT-L-14",
+      "pretrained": "openai",
+      "params_M": 304.0,
+      "weights_MB_fp32": 1160.0,
+      "gflops_224": 162.0,
+      "cpu_threads": 2,
+      "cpu_latency": {
+        "median_ms": 362.7,
+        "min_ms": 309.7
+      },
+      "cpu_preprocess_ms": 3.9,
+      "mps_img_per_s_fp32": 6.3,
+      "mps_img_per_s_fp16": 19.5,
+      "mps_fp32_vs_cpu_fp32_min_cos": 1.0,
+      "mps_fp16_vs_cpu_fp32_min_cos": 0.999996
+    }
+  ],
+  "cnn": [
+    {
+      "arch": "efficientnet_b0",
+      "params_M": 4.0,
+      "weights_MB_fp32": 15.3,
+      "gflops_256": 1.0,
+      "gflops_512": 4.0,
+      "gflops_1024": 16.0,
+      "cpu_latency_512": {
+        "median_ms": 222.3,
+        "min_ms": 222.0
+      },
+      "cpu_latency_1024": {
+        "median_ms": 519.4,
+        "min_ms": 515.9
+      },
+      "mps_train_img_per_s_256_fp32": 42.9,
+      "mps_train_img_per_s_256_fp16": 48.4,
+      "mps_train_img_per_s_256_bf16": 44.0,
+      "mps_infer_img_per_s_768_bs1": 18.4
+    },
+    {
+      "arch": "resnet18",
+      "params_M": 11.2,
+      "weights_MB_fp32": 42.6,
+      "gflops_256": 4.7,
+      "gflops_512": 18.9,
+      "gflops_1024": 75.8,
+      "cpu_latency_512": {
+        "median_ms": 74.1,
+        "min_ms": 72.3
+      },
+      "cpu_latency_1024": {
+        "median_ms": 347.6,
+        "min_ms": 340.1
+      },
+      "mps_train_img_per_s_256_fp32": 31.8,
+      "mps_train_img_per_s_256_fp16": 45.0,
+      "mps_train_img_per_s_256_bf16": 48.1,
+      "mps_infer_img_per_s_768_bs1": 21.7
+    },
+    {
+      "arch": "resnet50",
+      "params_M": 23.5,
+      "weights_MB_fp32": 89.7,
+      "gflops_256": 10.7,
+      "gflops_512": 42.7,
+      "gflops_1024": 170.8,
+      "cpu_latency_512": {
+        "median_ms": 321.1,
+        "min_ms": 279.6
+      },
+      "cpu_latency_1024": {
+        "median_ms": 1132.1,
+        "min_ms": 1028.7
+      },
+      "mps_train_img_per_s_256_fp32": 15.9,
+      "mps_train_img_per_s_256_fp16": 22.1,
+      "mps_train_img_per_s_256_bf16": 21.9,
+      "mps_infer_img_per_s_768_bs1": 7.7
+    },
+    {
+      "arch": "convnext_tiny",
+      "params_M": 27.8,
+      "weights_MB_fp32": 106.1,
+      "gflops_256": 11.6,
+      "gflops_512": 46.5,
+      "gflops_1024": 186.2,
+      "cpu_latency_512": {
+        "median_ms": 4332.5,
+        "min_ms": 3470.6
+      },
+      "cpu_latency_1024": {
+        "median_ms": 6426.2,
+        "min_ms": 6028.0
+      },
+      "mps_train_img_per_s_256_fp32": 3.9,
+      "mps_train_img_per_s_256_fp16": 4.6,
+      "mps_train_img_per_s_256_bf16": 3.1,
+      "mps_infer_img_per_s_768_bs1": 5.9
+    }
+  ],
+  "notes": [
+    "CPU = torch.set_num_threads(2) on Apple M5 (Accelerate/AMX GEMMs: optimistic vs a 2-vCPU x86 Space).",
+    "CNN rows were measured while the machine was overloaded by parallel data processing (load average 45-110; convnext_tiny at the peak), so their CPU/MPS numbers are pessimistic and only comparable within a row. EfficientNet-B0 was later measured at 61-66 ms per 224 px image on 2 idle CPU threads.",
+    "CNN training throughput is batch 64 at 256 px; production training ran at 224 px."
+  ],
+  "misc": {
+    "spectral_features_ms": 4,
+    "log_spectrum_display_ms": 1,
+    "note": "224x224 normalised image (latency run)"
+  }
+}

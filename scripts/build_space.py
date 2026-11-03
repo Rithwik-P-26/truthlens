@@ -1,0 +1,185 @@
+"""Assemble a deployable Hugging Face Space for TruthLens in ``space/``.
+
+Usage:
+    .venv/bin/python scripts/build_space.py            # builds ./space (replacing it)
+    .venv/bin/python scripts/build_space.py --out /tmp/truthlens-space
+
+Copies app.py, requirements.txt, src/, assets/, examples/, models/ (weights + config),
+reports/metrics.json and evaluation figures, and writes the Space README.md (YAML front
+matter) and a .gitattributes that routes binaries through LFS/Xet. It does not deploy.
+
+Deploy (lead), e.g.:
+    huggingface-cli upload <user>/truthlens space . --repo-type space
+"""
+
+from __future__ import annotations
+
+import argparse
+import shutil
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+
+JUNK_DIRS = {"__pycache__", "cache", "archive_v1", ".ipynb_checkpoints", "checkpoints", "runs", "wandb", "logs", ".cache", ".DS_Store"}
+JUNK_SUFFIXES = {".pyc", ".pyo", ".log", ".tmp"}
+IMAGE_SUFFIXES = {".png", ".jpg", ".jpeg", ".webp", ".svg"}
+
+# CLIP backbones fetched by open_clip from the HF Hub. Preloading them at Space build time avoids a
+# 1.7 GB download on the first request. (repo id, file) as open_clip 3.3 resolves them.
+PRELOAD = [("timm/vit_large_patch14_clip_224.openai", "open_clip_model.safetensors")]  # models/config.json
+PRELOAD_FAST = [("timm/vit_base_patch16_clip_224.openai", "open_clip_model.safetensors")]  # models/config_fast.json
+REQUIRED_MODEL_FILES = ["config.json", "config_fast.json", "clip_head.npz", "clip_vitb16_multi_head.npz",
+                        "cnn_efficientnet_b0.safetensors"]
+
+LFS_PATTERNS = [
+    "*.pt", "*.pth", "*.bin", "*.ckpt", "*.safetensors", "*.onnx", "*.pkl", "*.pickle", "*.joblib",
+    "*.npy", "*.npz", "*.h5", "*.tflite", "*.msgpack", "*.zip", "*.tar", "*.gz",
+    "*.png", "*.jpg", "*.jpeg", "*.webp", "*.gif", "*.bmp", "*.tif", "*.tiff", "*.pdf",
+]
+
+README_TEMPLATE = """---
+title: TruthLens
+emoji: 🔍
+colorFrom: indigo
+colorTo: purple
+sdk: gradio
+sdk_version: {sdk_version}
+python_version: "3.11"
+app_file: app.py
+pinned: false
+license: cc-by-nc-4.0
+short_description: Detect AI-generated images with calibrated evidence
+preload_from_hub:
+{preload}tags:
+  - deepfake-detection
+  - ai-generated-image-detection
+  - synthetic-media
+  - computer-vision
+---
+
+# TruthLens
+
+**Is this image a real photo or AI-generated?** TruthLens answers with a calibrated probability,
+abstains with *Uncertain* when it is not sure, and shows its evidence: a class-activation heatmap of where
+the artifact CNN found generation traces and the frequency spectrum of the analysed image.
+
+- **Detect:** upload, paste or drop an image, or try an example.
+- **Batch:** score many images and download a CSV.
+- **How it works:** the pipeline (CLIP semantic probe + CNN artifact detector, calibration, uncertainty band)
+  and headline metrics, including generators never seen in training.
+- **Limitations & responsible use:** read this before relying on a result.
+
+TruthLens gives a probability, not proof. Do not use it as the sole basis for accusing anyone or for legal,
+journalistic or moderation decisions. TruthLens does not save or log your images.
+
+Built for Neural Storm 2026 (FT-02 Deepfake & Synthetic Media Detection).
+"""
+
+
+def _ignore(directory: str, names: list[str]) -> set[str]:
+    return {n for n in names if n in JUNK_DIRS or Path(n).suffix.lower() in JUNK_SUFFIXES or n.startswith(".")}
+
+
+def _size(path: Path) -> int:
+    if path.is_file():
+        return path.stat().st_size
+    return sum(p.stat().st_size for p in path.rglob("*") if p.is_file())
+
+
+def _mb(n: int) -> str:
+    return f"{n / 1e6:,.1f} MB"
+
+
+def build(out: Path, fast: bool = False) -> int:
+    if out.resolve() == ROOT.resolve():
+        sys.exit("Refusing to build into the repo root.")
+    if out.exists():
+        shutil.rmtree(out)
+    out.mkdir(parents=True)
+    warnings: list[str] = []
+    copied: list[tuple[str, int]] = []
+
+    def copy_file(rel: str, required: bool = False):
+        src = ROOT / rel
+        if not src.is_file():
+            (warnings.append(f"missing required file {rel}") if required else warnings.append(f"skipped {rel} (not found)"))
+            return
+        dst = out / rel
+        dst.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(src, dst)
+        copied.append((rel, _size(dst)))
+
+    def copy_dir(rel: str, required: bool = False):
+        src = ROOT / rel
+        if not src.is_dir() or not any(src.iterdir()):
+            (warnings.append(f"missing required folder {rel}/") if required else warnings.append(f"skipped {rel}/ (missing or empty)"))
+            return
+        shutil.copytree(src, out / rel, ignore=_ignore)
+        copied.append((rel + "/", _size(out / rel)))
+
+    copy_file("app.py", required=True)
+    copy_file("requirements.txt", required=True)
+    copy_dir("src", required=True)
+    copy_dir("assets", required=True)
+    copy_dir("examples")
+    copy_dir("models")
+    copy_file("reports/metrics.json")
+
+    figs = ROOT / "reports" / "figures"
+    if figs.is_dir():
+        for p in sorted(figs.iterdir()):
+            if p.suffix.lower() in IMAGE_SUFFIXES and not p.name.startswith("data_"):
+                copy_file(f"reports/figures/{p.name}")
+
+    if not (out / "models" / "config.json").is_file():
+        warnings.append("models/config.json not found: the Space will run in DEMO MODE (simulated results)")
+    else:
+        for name in REQUIRED_MODEL_FILES:
+            if not (out / "models" / name).is_file():
+                warnings.append(f"models/{name} missing from the Space")
+
+    try:
+        import gradio
+
+        sdk_version = gradio.__version__
+    except ImportError:
+        sdk_version = "6.31.0"
+        warnings.append("gradio not importable; using sdk_version 6.31.0")
+    (out / "README.md").write_text(README_TEMPLATE.format(
+        sdk_version=sdk_version,
+        preload="".join(f"  - {repo} {fname}\n" for repo, fname in PRELOAD + (PRELOAD_FAST if fast else []))), encoding="utf-8")
+    (out / ".gitattributes").write_text(
+        "".join(f"{p} filter=lfs diff=lfs merge=lfs -text\n" for p in LFS_PATTERNS), encoding="utf-8"
+    )
+
+    big = [p for p in out.rglob("*") if p.is_file() and p.stat().st_size > 10_000_000]
+    total = _size(out)
+
+    print(f"Built Space in {out}")
+    for rel, n in copied:
+        print(f"  {rel:<40} {_mb(n):>12}")
+    print(f"  {'README.md, .gitattributes':<40}")
+    print(f"  {'TOTAL':<40} {_mb(total):>12}")
+    if big:
+        print("Files over 10 MB (stored via LFS/Xet by the .gitattributes):")
+        for p in big:
+            print(f"  {p.relative_to(out)}  {_mb(p.stat().st_size)}")
+    if total > 1_000_000_000:
+        warnings.append(f"Space is {_mb(total)}; consider trimming models/ or examples/")
+    for w in warnings:
+        print("WARNING:", w)
+    return 1 if any(w.startswith("missing required") for w in warnings) else 0
+
+
+def main() -> None:
+    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("--out", type=Path, default=ROOT / "space", help="output folder (default: ./space)")
+    ap.add_argument("--fast", action="store_true",
+                    help="also preload the ViT-B/16 backbone (for TRUTHLENS_CONFIG=config_fast.json)")
+    args = ap.parse_args()
+    sys.exit(build(args.out, fast=args.fast))
+
+
+if __name__ == "__main__":
+    main()

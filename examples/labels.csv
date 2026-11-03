@@ -1,0 +1,13 @@
+file,label,source,split,hard_case
+ai_veo_3_volcano_flowerpot.jpg,AI,veo_3,test_unseen,
+real_pexels_tower_night.jpg,Real,pexels,test,
+ai_gpt_image_1_5_frog_knight.jpg,AI,gpt_image_1_5,test_unseen,
+real_docci_bicycle.jpg,Real,docci,test_unseen,
+ai_wan_video_2_5_snow_fox.jpg,AI,wan_video_2_5,test_unseen,
+real_pexels_shark.jpg,Real,pexels,test_unseen,
+ai_veo_3_stone_villa.jpg,AI,veo_3,test_unseen,
+real_imagenet_samoyed.jpg,Real,imagenet,test_unseen,
+ai_seedream_v4_5_aurora_knight.jpg,AI,seedream_v4_5,test_unseen,
+ai_sd15_red_panda.jpg,AI,sd15,test,
+hard_ai_midjourney_6_canoe_lagoon.jpg,AI,midjourney_6,test_unseen,yes
+hard_real_docci_hyacinths.jpg,Real,docci,test_unseen,yes

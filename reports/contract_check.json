@@ -1,0 +1,83 @@
+{
+  "threads": 2,
+  "load_s": 6.6,
+  "contract3_config": {
+    "device_is_cpu": true,
+    "version_str": true,
+    "backbones": true,
+    "thresholds": true
+  },
+  "odd_inputs": {
+    "tiny_100x80": {
+      "errors": [],
+      "verdict": "Uncertain",
+      "latency_ms": 225,
+      "explanation": [
+        "Calibrated probability of AI generation is 99%, but this input is outside the conditions the model was validated on.",
+        "All detectors lean AI-generated: CLIP probe >99%, CNN artifacts 60%.",
+        "The artifact CNN's evidence is concentrated in the lower-right of the image (40% of the heat in 10% of the pixels); only the central 80x80 square is analysed.",
+        "The image is only 80 px on its shorter side, so it was upsampled to 224 px. Training images were never upsampled, and in our robustness tests upsampled real photos were often mistaken for AI-generated ones, so no verdict is given."
+      ]
+    },
+    "rgba_300x300": {
+      "errors": [],
+      "verdict": "AI-generated",
+      "latency_ms": 227,
+      "explanation": [
+        "Calibrated probability of AI generation is 88% (verdicts need at least 65%).",
+        "All detectors lean AI-generated: CLIP probe 90%, CNN artifacts 58%.",
+        "The artifact CNN's evidence is concentrated in the lower-left of the image (42% of the heat in 10% of the pixels).",
+        "High-frequency energy is higher than in 99% of real training photos (sensor-like noise or sharpening)."
+      ]
+    },
+    "gray_400x300": {
+      "errors": [],
+      "verdict": "Uncertain",
+      "latency_ms": 226,
+      "explanation": [
+        "Calibrated probability of AI generation is 40%, inside the uncertainty band (35%-65%), so TruthLens does not issue a verdict.",
+        "The detectors disagree (CLIP probe 8%, CNN artifacts 88%; spread 81%), which lowers confidence.",
+        "The artifact CNN's evidence is spread across the image, strongest in the upper-left; only the central 300x300 square is analysed.",
+        "High-frequency energy is higher than in 99% of real training photos (sensor-like noise or sharpening)."
+      ]
+    },
+    "panorama_2000x500": {
+      "errors": [],
+      "verdict": "Real",
+      "latency_ms": 229,
+      "explanation": [
+        "Calibrated probability of AI generation is only 29% (a 'Real' verdict needs at most 35%).",
+        "The detectors disagree (CLIP probe 91%, CNN artifacts 3%; spread 88%), which lowers confidence.",
+        "The artifact CNN's evidence is concentrated in the lower-left of the image (86% of the heat in 10% of the pixels); only the central 500x500 square is analysed.",
+        "High-frequency energy is higher than in 99% of real training photos (sensor-like noise or sharpening)."
+      ]
+    },
+    "photo_4032x3024": {
+      "errors": [],
+      "verdict": "AI-generated",
+      "latency_ms": 406,
+      "explanation": [
+        "Calibrated probability of AI generation is 95% (verdicts need at least 65%).",
+        "All detectors lean AI-generated: CLIP probe 96%, CNN artifacts 66%.",
+        "The artifact CNN found no strong localised generation artifacts; only the central 3024x3024 square is analysed.",
+        "High-frequency energy is higher than in 99% of real training photos (sensor-like noise or sharpening)."
+      ]
+    }
+  },
+  "cam": {
+    "logit_decomposition_abs_err": 1.9073486328125e-06,
+    "gradcam_vs_cam_rel_err": 2.04980347007222e-06,
+    "pytorch_grad_cam_correlation": 0.9999999999998844
+  },
+  "real_images": {
+    "n": 40,
+    "contract_errors": [],
+    "median_latency_ms": 225.01010401174426
+  },
+  "detector_vs_cached_eval": {
+    "max_abs_prob_diff": 0.06467977115556028,
+    "mean_abs_prob_diff": 0.0042059152382600325
+  },
+  "hard_failures": [],
+  "passed": true
+}

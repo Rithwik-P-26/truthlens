@@ -1,0 +1,96 @@
+{
+  "latency_ms_cpu": 243.43143752776086,
+  "latency_ms_cpu_definition": "median Detector.predict wall time, 1024x1024 upload, torch threads=2",
+  "threads": 2,
+  "device": "cpu",
+  "machine": "arm64 arm",
+  "blas": "accelerate",
+  "model_load_s": 5.1,
+  "components": {
+    "normalize_224x224": {
+      "median_ms": 0.734271015971899,
+      "p90_ms": 0.8080000407062471
+    },
+    "clip_224x224": {
+      "median_ms": 153.88606299529783,
+      "p90_ms": 155.3087080246769
+    },
+    "cnn_224x224": {
+      "median_ms": 65.04750001477078,
+      "p90_ms": 65.46625000191852
+    },
+    "spectral_features_224x224": {
+      "median_ms": 3.7062920164316893,
+      "p90_ms": 3.801874991040677
+    },
+    "display_spectrum_224x224": {
+      "median_ms": 0.685708480887115,
+      "p90_ms": 0.7662919815629721
+    },
+    "predict_total_224x224": {
+      "median_ms": 223.95181251340546,
+      "p90_ms": 230.03149998839945
+    },
+    "normalize_1024x1024": {
+      "median_ms": 2.9487294668797404,
+      "p90_ms": 3.062249976210296
+    },
+    "clip_1024x1024": {
+      "median_ms": 153.98868749616668,
+      "p90_ms": 154.33495899196714
+    },
+    "cnn_1024x1024": {
+      "median_ms": 63.557187997503206,
+      "p90_ms": 64.37820801511407
+    },
+    "spectral_features_1024x1024": {
+      "median_ms": 3.6785829870495945,
+      "p90_ms": 3.8252919912338257
+    },
+    "display_spectrum_1024x1024": {
+      "median_ms": 0.6182710058055818,
+      "p90_ms": 0.7281670114025474
+    },
+    "predict_total_1024x1024": {
+      "median_ms": 243.43143752776086,
+      "p90_ms": 246.11804203595966
+    },
+    "normalize_4032x3024": {
+      "median_ms": 12.94222948490642,
+      "p90_ms": 13.670624990481883
+    },
+    "clip_4032x3024": {
+      "median_ms": 153.72312447289005,
+      "p90_ms": 154.496916977223
+    },
+    "cnn_4032x3024": {
+      "median_ms": 63.12735448591411,
+      "p90_ms": 63.78241698257625
+    },
+    "spectral_features_4032x3024": {
+      "median_ms": 3.6769169964827597,
+      "p90_ms": 3.77129198750481
+    },
+    "display_spectrum_4032x3024": {
+      "median_ms": 0.6677090132143348,
+      "p90_ms": 0.8077499805949628
+    },
+    "predict_total_4032x3024": {
+      "median_ms": 301.6072704922408,
+      "p90_ms": 305.9964160202071
+    },
+    "fast_predict_total_224x224": {
+      "median_ms": 109.13639550562948,
+      "p90_ms": 109.56629202701151
+    },
+    "fast_predict_total_1024x1024": {
+      "median_ms": 128.31468749209307,
+      "p90_ms": 129.26862499443814
+    },
+    "fast_predict_total_4032x3024": {
+      "median_ms": 187.30081248213537,
+      "p90_ms": 188.76220798119903
+    }
+  },
+  "note": "torch.set_num_threads(2) on arm64 with BLAS=accelerate. Apple AMX makes ViT GEMMs much faster than on a 2-vCPU x86 Space; Space numbers must be measured there (predict() returns latency_ms)."
+}

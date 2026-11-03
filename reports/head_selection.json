@@ -1,0 +1,695 @@
+{
+  "deployed_clip_head": "clip_vitl14_multi",
+  "deployed_backbone": "clip_vitl14",
+  "selection_rule": "highest leave-one-family-out mean AUC on TRAIN->VAL (rounded to 3 dp; tie-break: VAL AUC)",
+  "heads": {
+    "clip_vitl14_final": {
+      "cv": {
+        "cv_auc_by_C": {
+          "0.001": 0.9566502601302552,
+          "0.003": 0.9584184651925846,
+          "0.01": 0.9581252876646129,
+          "0.03": 0.9575445180420831,
+          "0.1": 0.9577854743569549,
+          "0.3": 0.9587073793395204
+        },
+        "best_C": 0.3,
+        "folds": 5
+      },
+      "val_auc": 0.9637697375848776,
+      "lofo": {
+        "per_family": {
+          "adm": {
+            "auc": 0.9196546665704735,
+            "detection_rate": 0.7245508982035929,
+            "n_val": 167,
+            "n_train_removed": 1299
+          },
+          "flux1": {
+            "auc": 0.8777192101740294,
+            "detection_rate": 0.625,
+            "n_val": 48,
+            "n_train_removed": 275
+          },
+          "glide": {
+            "auc": 0.962938420348059,
+            "detection_rate": 0.88,
+            "n_val": 150,
+            "n_train_removed": 1225
+          },
+          "grok": {
+            "auc": 0.8993473895582329,
+            "detection_rate": 0.75,
+            "n_val": 8,
+            "n_train_removed": 37
+          },
+          "hidream": {
+            "auc": 0.9267068273092369,
+            "detection_rate": 0.6666666666666666,
+            "n_val": 6,
+            "n_train_removed": 29
+          },
+          "imagen": {
+            "auc": 0.9570281124497992,
+            "detection_rate": 0.8,
+            "n_val": 5,
+            "n_train_removed": 39
+          },
+          "kolors": {
+            "auc": 0.967871485943775,
+            "detection_rate": 0.8888888888888888,
+            "n_val": 9,
+            "n_train_removed": 36
+          },
+          "playground": {
+            "auc": 0.9809236947791165,
+            "detection_rate": 1.0,
+            "n_val": 4,
+            "n_train_removed": 44
+          },
+          "qwen": {
+            "auc": 0.9188420348058902,
+            "detection_rate": 0.6666666666666666,
+            "n_val": 6,
+            "n_train_removed": 35
+          },
+          "sd1": {
+            "auc": 0.9274636233375714,
+            "detection_rate": 0.7437185929648241,
+            "n_val": 199,
+            "n_train_removed": 1565
+          },
+          "sd2": {
+            "auc": 0.9581659973226239,
+            "detection_rate": 0.8333333333333334,
+            "n_val": 12,
+            "n_train_removed": 71
+          },
+          "sd3": {
+            "auc": 0.8245481927710843,
+            "detection_rate": 0.75,
+            "n_val": 4,
+            "n_train_removed": 36
+          },
+          "sdxl": {
+            "auc": 0.9494854417670684,
+            "detection_rate": 0.8958333333333334,
+            "n_val": 48,
+            "n_train_removed": 376
+          },
+          "vqdm": {
+            "auc": 0.9283843448327471,
+            "detection_rate": 0.7267080745341615,
+            "n_val": 161,
+            "n_train_removed": 1202
+          },
+          "wukong": {
+            "auc": 0.9135358000047529,
+            "detection_rate": 0.7218934911242604,
+            "n_val": 169,
+            "n_train_removed": 1300
+          }
+        },
+        "mean_auc": 0.9313187195710969,
+        "min_auc": 0.8777192101740294,
+        "n_families_scored": 13
+      },
+      "dim": 768,
+      "seconds": 9.5,
+      "backbone": "clip_vitl14"
+    },
+    "clip_vitl14_multi": {
+      "cv": {
+        "cv_auc_by_C": {
+          "0.001": 0.9983199019866525,
+          "0.003": 0.9985272671564243,
+          "0.01": 0.998599530106888,
+          "0.03": 0.9985703720614783,
+          "0.1": 0.9985227100116013,
+          "0.3": 0.9985120587387508
+        },
+        "best_C": 0.01,
+        "folds": 5
+      },
+      "val_auc": 0.9982560765148949,
+      "lofo": {
+        "per_family": {
+          "adm": {
+            "auc": 0.97618016978092,
+            "detection_rate": 0.8023952095808383,
+            "n_val": 167,
+            "n_train_removed": 1299
+          },
+          "flux1": {
+            "auc": 0.9720548862115127,
+            "detection_rate": 0.6458333333333334,
+            "n_val": 48,
+            "n_train_removed": 275
+          },
+          "glide": {
+            "auc": 0.9985943775100401,
+            "detection_rate": 0.9933333333333333,
+            "n_val": 150,
+            "n_train_removed": 1225
+          },
+          "grok": {
+            "auc": 0.9884538152610441,
+            "detection_rate": 0.875,
+            "n_val": 8,
+            "n_train_removed": 37
+          },
+          "hidream": {
+            "auc": 0.9792503346720214,
+            "detection_rate": 0.6666666666666666,
+            "n_val": 6,
+            "n_train_removed": 29
+          },
+          "imagen": {
+            "auc": 0.9608433734939759,
+            "detection_rate": 0.6,
+            "n_val": 5,
+            "n_train_removed": 39
+          },
+          "kolors": {
+            "auc": 0.998549754573851,
+            "detection_rate": 1.0,
+            "n_val": 9,
+            "n_train_removed": 36
+          },
+          "playground": {
+            "auc": 1.0,
+            "detection_rate": 1.0,
+            "n_val": 4,
+            "n_train_removed": 44
+          },
+          "qwen": {
+            "auc": 0.983433734939759,
+            "detection_rate": 0.6666666666666666,
+            "n_val": 6,
+            "n_train_removed": 35
+          },
+          "sd1": {
+            "auc": 0.9982290972936974,
+            "detection_rate": 0.9849246231155779,
+            "n_val": 199,
+            "n_train_removed": 1565
+          },
+          "sd2": {
+            "auc": 1.0,
+            "detection_rate": 1.0,
+            "n_val": 12,
+            "n_train_removed": 71
+          },
+          "sd3": {
+            "auc": 0.9984939759036144,
+            "detection_rate": 1.0,
+            "n_val": 4,
+            "n_train_removed": 36
+          },
+          "sdxl": {
+            "auc": 0.9947498326639893,
+            "detection_rate": 0.9375,
+            "n_val": 48,
+            "n_train_removed": 376
+          },
+          "vqdm": {
+            "auc": 0.9592843423382973,
+            "detection_rate": 0.5900621118012422,
+            "n_val": 161,
+            "n_train_removed": 1202
+          },
+          "wukong": {
+            "auc": 0.9957047123404862,
+            "detection_rate": 0.9644970414201184,
+            "n_val": 169,
+            "n_train_removed": 1300
+          }
+        },
+        "mean_auc": 0.9850252639291995,
+        "min_auc": 0.9592843423382973,
+        "n_families_scored": 13
+      },
+      "dim": 5888,
+      "seconds": 45.0,
+      "backbone": "clip_vitl14"
+    },
+    "clip_vitb16_final": {
+      "cv": {
+        "cv_auc_by_C": {
+          "0.001": 0.9246246042797356,
+          "0.003": 0.9316699336825195,
+          "0.01": 0.9345776047611979,
+          "0.03": 0.9352885601829101,
+          "0.1": 0.9355456904606226,
+          "0.3": 0.9357608016751231
+        },
+        "best_C": 0.3,
+        "folds": 5
+      },
+      "val_auc": 0.925002217706166,
+      "lofo": {
+        "per_family": {
+          "adm": {
+            "auc": 0.8149063319144844,
+            "detection_rate": 0.5449101796407185,
+            "n_val": 167,
+            "n_train_removed": 1299
+          },
+          "flux1": {
+            "auc": 0.7859772423025435,
+            "detection_rate": 0.5833333333333334,
+            "n_val": 48,
+            "n_train_removed": 275
+          },
+          "glide": {
+            "auc": 0.9667804551539492,
+            "detection_rate": 0.9533333333333334,
+            "n_val": 150,
+            "n_train_removed": 1225
+          },
+          "grok": {
+            "auc": 0.7754769076305221,
+            "detection_rate": 0.5,
+            "n_val": 8,
+            "n_train_removed": 37
+          },
+          "hidream": {
+            "auc": 0.8505689424364122,
+            "detection_rate": 0.6666666666666666,
+            "n_val": 6,
+            "n_train_removed": 29
+          },
+          "imagen": {
+            "auc": 0.8552208835341366,
+            "detection_rate": 0.6,
+            "n_val": 5,
+            "n_train_removed": 39
+          },
+          "kolors": {
+            "auc": 0.8387996430165104,
+            "detection_rate": 0.5555555555555556,
+            "n_val": 9,
+            "n_train_removed": 36
+          },
+          "playground": {
+            "auc": 0.9123995983935743,
+            "detection_rate": 0.75,
+            "n_val": 4,
+            "n_train_removed": 44
+          },
+          "qwen": {
+            "auc": 0.8798527443105757,
+            "detection_rate": 0.8333333333333334,
+            "n_val": 6,
+            "n_train_removed": 35
+          },
+          "sd1": {
+            "auc": 0.8910667796815402,
+            "detection_rate": 0.7085427135678392,
+            "n_val": 199,
+            "n_train_removed": 1565
+          },
+          "sd2": {
+            "auc": 0.9626840696117805,
+            "detection_rate": 1.0,
+            "n_val": 12,
+            "n_train_removed": 71
+          },
+          "sd3": {
+            "auc": 0.9523092369477911,
+            "detection_rate": 0.75,
+            "n_val": 4,
+            "n_train_removed": 36
+          },
+          "sdxl": {
+            "auc": 0.9161646586345382,
+            "detection_rate": 0.8125,
+            "n_val": 48,
+            "n_train_removed": 376
+          },
+          "vqdm": {
+            "auc": 0.7712651849634563,
+            "detection_rate": 0.4658385093167702,
+            "n_val": 161,
+            "n_train_removed": 1202
+          },
+          "wukong": {
+            "auc": 0.8525700434875597,
+            "detection_rate": 0.650887573964497,
+            "n_val": 169,
+            "n_train_removed": 1300
+          }
+        },
+        "mean_auc": 0.8585641451290774,
+        "min_auc": 0.7712651849634563,
+        "n_families_scored": 13
+      },
+      "dim": 512,
+      "seconds": 5.0,
+      "backbone": "clip_vitb16"
+    },
+    "clip_vitb16_multi": {
+      "cv": {
+        "cv_auc_by_C": {
+          "0.001": 0.9941662824967956,
+          "0.003": 0.9948347118330707,
+          "0.01": 0.9948649032419074,
+          "0.03": 0.9946237647519665,
+          "0.1": 0.99430128195068,
+          "0.3": 0.9939618920457944
+        },
+        "best_C": 0.01,
+        "folds": 5
+      },
+      "val_auc": 0.9939789277592297,
+      "lofo": {
+        "per_family": {
+          "adm": {
+            "auc": 0.9548793978308443,
+            "detection_rate": 0.6706586826347305,
+            "n_val": 167,
+            "n_train_removed": 1299
+          },
+          "flux1": {
+            "auc": 0.9175870147255689,
+            "detection_rate": 0.625,
+            "n_val": 48,
+            "n_train_removed": 275
+          },
+          "glide": {
+            "auc": 0.993768406961178,
+            "detection_rate": 0.9733333333333334,
+            "n_val": 150,
+            "n_train_removed": 1225
+          },
+          "grok": {
+            "auc": 0.9446536144578314,
+            "detection_rate": 0.75,
+            "n_val": 8,
+            "n_train_removed": 37
+          },
+          "hidream": {
+            "auc": 0.9511378848728247,
+            "detection_rate": 0.8333333333333334,
+            "n_val": 6,
+            "n_train_removed": 29
+          },
+          "imagen": {
+            "auc": 0.9696787148594377,
+            "detection_rate": 0.6,
+            "n_val": 5,
+            "n_train_removed": 39
+          },
+          "kolors": {
+            "auc": 0.9820392681838466,
+            "detection_rate": 0.8888888888888888,
+            "n_val": 9,
+            "n_train_removed": 36
+          },
+          "playground": {
+            "auc": 0.9949799196787148,
+            "detection_rate": 1.0,
+            "n_val": 4,
+            "n_train_removed": 44
+          },
+          "qwen": {
+            "auc": 0.9695448460508701,
+            "detection_rate": 0.6666666666666666,
+            "n_val": 6,
+            "n_train_removed": 35
+          },
+          "sd1": {
+            "auc": 0.9945308873685698,
+            "detection_rate": 0.9597989949748744,
+            "n_val": 199,
+            "n_train_removed": 1565
+          },
+          "sd2": {
+            "auc": 0.9969042838018741,
+            "detection_rate": 1.0,
+            "n_val": 12,
+            "n_train_removed": 71
+          },
+          "sd3": {
+            "auc": 0.9984939759036144,
+            "detection_rate": 1.0,
+            "n_val": 4,
+            "n_train_removed": 36
+          },
+          "sdxl": {
+            "auc": 0.9850025100401605,
+            "detection_rate": 0.9375,
+            "n_val": 48,
+            "n_train_removed": 376
+          },
+          "vqdm": {
+            "auc": 0.8636159545012347,
+            "detection_rate": 0.36645962732919257,
+            "n_val": 161,
+            "n_train_removed": 1202
+          },
+          "wukong": {
+            "auc": 0.9831040136878877,
+            "detection_rate": 0.8698224852071006,
+            "n_val": 169,
+            "n_train_removed": 1300
+          }
+        },
+        "mean_auc": 0.9620343690263174,
+        "min_auc": 0.8636159545012347,
+        "n_families_scored": 13
+      },
+      "dim": 4352,
+      "seconds": 31.7,
+      "backbone": "clip_vitb16"
+    },
+    "freq": {
+      "cv": {
+        "cv_auc_by_C": {
+          "0.001": 0.7348320301514629,
+          "0.003": 0.7402225624228065,
+          "0.01": 0.7450458495088581,
+          "0.03": 0.7468385805602786,
+          "0.1": 0.7470502744495964,
+          "0.3": 0.7469858842994175
+        },
+        "best_C": 0.1,
+        "folds": 5
+      },
+      "val_auc": 0.7422874227835035,
+      "lofo": {
+        "per_family": {
+          "adm": {
+            "auc": 0.7524649496188346,
+            "detection_rate": 0.5688622754491018,
+            "n_val": 167,
+            "n_train_removed": 1299
+          },
+          "flux1": {
+            "auc": 0.7120565595716197,
+            "detection_rate": 0.5208333333333334,
+            "n_val": 48,
+            "n_train_removed": 275
+          },
+          "glide": {
+            "auc": 0.9833734939759037,
+            "detection_rate": 0.98,
+            "n_val": 150,
+            "n_train_removed": 1225
+          },
+          "grok": {
+            "auc": 0.7152359437751004,
+            "detection_rate": 0.625,
+            "n_val": 8,
+            "n_train_removed": 37
+          },
+          "hidream": {
+            "auc": 0.6075970548862115,
+            "detection_rate": 0.3333333333333333,
+            "n_val": 6,
+            "n_train_removed": 29
+          },
+          "imagen": {
+            "auc": 0.5146586345381526,
+            "detection_rate": 0.0,
+            "n_val": 5,
+            "n_train_removed": 39
+          },
+          "kolors": {
+            "auc": 0.5777554663096831,
+            "detection_rate": 0.3333333333333333,
+            "n_val": 9,
+            "n_train_removed": 36
+          },
+          "playground": {
+            "auc": 0.7417168674698795,
+            "detection_rate": 0.75,
+            "n_val": 4,
+            "n_train_removed": 44
+          },
+          "qwen": {
+            "auc": 0.6325301204819278,
+            "detection_rate": 0.3333333333333333,
+            "n_val": 6,
+            "n_train_removed": 35
+          },
+          "sd1": {
+            "auc": 0.6572723053016085,
+            "detection_rate": 0.3015075376884422,
+            "n_val": 199,
+            "n_train_removed": 1565
+          },
+          "sd2": {
+            "auc": 0.927376171352075,
+            "detection_rate": 0.9166666666666666,
+            "n_val": 12,
+            "n_train_removed": 71
+          },
+          "sd3": {
+            "auc": 0.8102409638554218,
+            "detection_rate": 0.75,
+            "n_val": 4,
+            "n_train_removed": 36
+          },
+          "sdxl": {
+            "auc": 0.7238746653279786,
+            "detection_rate": 0.5,
+            "n_val": 48,
+            "n_train_removed": 376
+          },
+          "vqdm": {
+            "auc": 0.5786998927386565,
+            "detection_rate": 0.33540372670807456,
+            "n_val": 161,
+            "n_train_removed": 1202
+          },
+          "wukong": {
+            "auc": 0.6149271642784154,
+            "detection_rate": 0.2603550295857988,
+            "n_val": 169,
+            "n_train_removed": 1300
+          }
+        },
+        "mean_auc": 0.6921401863197052,
+        "min_auc": 0.5146586345381526,
+        "n_families_scored": 13
+      },
+      "dim": 67,
+      "seconds": 0.8
+    },
+    "meta": {
+      "cv": {
+        "cv_auc_by_C": {
+          "0.001": 0.6087899993665336,
+          "0.003": 0.6087899993665336,
+          "0.01": 0.6087899993665336,
+          "0.03": 0.6087899993665336,
+          "0.1": 0.6087899993665336,
+          "0.3": 0.6087899993665336
+        },
+        "best_C": 0.001,
+        "folds": 5
+      },
+      "val_auc": 0.5948583490588861,
+      "lofo": {
+        "per_family": {
+          "adm": {
+            "auc": 0.6780655556357166,
+            "detection_rate": 0.30538922155688625,
+            "n_val": 167,
+            "n_train_removed": 1299
+          },
+          "flux1": {
+            "auc": 0.6383868808567604,
+            "detection_rate": 0.5208333333333334,
+            "n_val": 48,
+            "n_train_removed": 275
+          },
+          "glide": {
+            "auc": 0.8805254350736279,
+            "detection_rate": 0.22666666666666666,
+            "n_val": 150,
+            "n_train_removed": 1225
+          },
+          "grok": {
+            "auc": 0.6068022088353414,
+            "detection_rate": 0.625,
+            "n_val": 8,
+            "n_train_removed": 37
+          },
+          "hidream": {
+            "auc": 0.5090361445783133,
+            "detection_rate": 0.5,
+            "n_val": 6,
+            "n_train_removed": 29
+          },
+          "imagen": {
+            "auc": 0.24457831325301205,
+            "detection_rate": 0.0,
+            "n_val": 5,
+            "n_train_removed": 39
+          },
+          "kolors": {
+            "auc": 0.35553324408746095,
+            "detection_rate": 0.2222222222222222,
+            "n_val": 9,
+            "n_train_removed": 36
+          },
+          "playground": {
+            "auc": 0.4899598393574297,
+            "detection_rate": 0.25,
+            "n_val": 4,
+            "n_train_removed": 44
+          },
+          "qwen": {
+            "auc": 0.6449129852744311,
+            "detection_rate": 0.6666666666666666,
+            "n_val": 6,
+            "n_train_removed": 35
+          },
+          "sd1": {
+            "auc": 0.4935773243728684,
+            "detection_rate": 0.07035175879396985,
+            "n_val": 199,
+            "n_train_removed": 1565
+          },
+          "sd2": {
+            "auc": 0.33726572958500667,
+            "detection_rate": 0.25,
+            "n_val": 12,
+            "n_train_removed": 71
+          },
+          "sd3": {
+            "auc": 0.5434236947791165,
+            "detection_rate": 0.5,
+            "n_val": 4,
+            "n_train_removed": 36
+          },
+          "sdxl": {
+            "auc": 0.5607325133868809,
+            "detection_rate": 0.3958333333333333,
+            "n_val": 48,
+            "n_train_removed": 376
+          },
+          "vqdm": {
+            "auc": 0.5943868642270947,
+            "detection_rate": 0.2795031055900621,
+            "n_val": 161,
+            "n_train_removed": 1202
+          },
+          "wukong": {
+            "auc": 0.4219273543879661,
+            "detection_rate": 0.14201183431952663,
+            "n_val": 169,
+            "n_train_removed": 1300
+          }
+        },
+        "mean_auc": 0.5358254271964985,
+        "min_auc": 0.24457831325301205,
+        "n_families_scored": 13
+      },
+      "dim": 12,
+      "seconds": 0.2
+    }
+  }
+}

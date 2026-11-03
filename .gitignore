@@ -1,0 +1,17 @@
+.venv/
+__pycache__/
+*.pyc
+.DS_Store
+data/
+models/*.pt
+models/*.pth
+models/cache/
+.gradio/
+flagged/
+TEAM_PLAN.md
+.ipynb_checkpoints/
+space/
+logs/
+.claude/
+.pytest_cache/
+models/archive_v1/

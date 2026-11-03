@@ -1,0 +1,731 @@
+{
+  "deployed_clip_head": "clip_vitl14_multi",
+  "deployed_backbone": "clip_vitl14",
+  "selection_rule": "highest leave-one-family-out mean AUC on TRAIN->VAL (rounded to 3 dp; tie-break: VAL AUC)",
+  "heads": {
+    "clip_vitl14_final": {
+      "cv": {
+        "cv_auc_by_C": {
+          "0.001": 0.9589738209027748,
+          "0.003": 0.9606921557273275,
+          "0.01": 0.9605455451646152,
+          "0.03": 0.9600621234632636,
+          "0.1": 0.9602763134797405,
+          "0.3": 0.9612206182682297
+        },
+        "best_C": 0.3,
+        "folds": 5
+      },
+      "val_auc": 0.9656920856115224,
+      "lofo": {
+        "per_family": {
+          "adm": {
+            "auc": 0.9114935351160741,
+            "detection_rate": 0.6951219512195121,
+            "n_val": 164,
+            "n_train_removed": 1281
+          },
+          "anima": {
+            "auc": 0.9897088353413656,
+            "detection_rate": 1.0,
+            "n_val": 8,
+            "n_train_removed": 54
+          },
+          "flux1": {
+            "auc": 0.871064904780412,
+            "detection_rate": 0.5806451612903226,
+            "n_val": 31,
+            "n_train_removed": 211
+          },
+          "glide": {
+            "auc": 0.9661695562738759,
+            "detection_rate": 0.8963414634146342,
+            "n_val": 164,
+            "n_train_removed": 1275
+          },
+          "grok": {
+            "auc": 0.8376004016064256,
+            "detection_rate": 0.75,
+            "n_val": 4,
+            "n_train_removed": 27
+          },
+          "hidream": {
+            "auc": 0.9083835341365463,
+            "detection_rate": 0.75,
+            "n_val": 4,
+            "n_train_removed": 27
+          },
+          "imagen": {
+            "auc": 0.9487951807228915,
+            "detection_rate": 0.75,
+            "n_val": 4,
+            "n_train_removed": 27
+          },
+          "kolors": {
+            "auc": 0.9836847389558232,
+            "detection_rate": 1.0,
+            "n_val": 4,
+            "n_train_removed": 27
+          },
+          "playground": {
+            "auc": 0.976656626506024,
+            "detection_rate": 1.0,
+            "n_val": 4,
+            "n_train_removed": 27
+          },
+          "qwen": {
+            "auc": 0.9200803212851406,
+            "detection_rate": 0.6,
+            "n_val": 5,
+            "n_train_removed": 27
+          },
+          "sd1": {
+            "auc": 0.9227987217687956,
+            "detection_rate": 0.7043010752688172,
+            "n_val": 186,
+            "n_train_removed": 1439
+          },
+          "sd2": {
+            "auc": 0.9482931726907631,
+            "detection_rate": 0.625,
+            "n_val": 8,
+            "n_train_removed": 54
+          },
+          "sd3": {
+            "auc": 0.8554216867469879,
+            "detection_rate": 0.75,
+            "n_val": 4,
+            "n_train_removed": 27
+          },
+          "sdxl": {
+            "auc": 0.9549737411183195,
+            "detection_rate": 0.8846153846153846,
+            "n_val": 78,
+            "n_train_removed": 512
+          },
+          "vqdm": {
+            "auc": 0.9330676363992556,
+            "detection_rate": 0.725609756097561,
+            "n_val": 164,
+            "n_train_removed": 1277
+          },
+          "wukong": {
+            "auc": 0.9156810167499264,
+            "detection_rate": 0.7378048780487805,
+            "n_val": 164,
+            "n_train_removed": 1277
+          }
+        },
+        "mean_auc": 0.933333144152393,
+        "min_auc": 0.871064904780412,
+        "n_families_scored": 10
+      },
+      "dim": 768,
+      "seconds": 8.6,
+      "backbone": "clip_vitl14"
+    },
+    "clip_vitl14_multi": {
+      "cv": {
+        "cv_auc_by_C": {
+          "0.001": 0.9984943119228431,
+          "0.003": 0.9986967995987863,
+          "0.01": 0.9987693255756795,
+          "0.03": 0.9987594603256822,
+          "0.1": 0.9987221054401919,
+          "0.3": 0.9986751570967591
+        },
+        "best_C": 0.01,
+        "folds": 5
+      },
+      "val_auc": 0.9985474024612506,
+      "lofo": {
+        "per_family": {
+          "adm": {
+            "auc": 0.9774892251934567,
+            "detection_rate": 0.7804878048780488,
+            "n_val": 164,
+            "n_train_removed": 1281
+          },
+          "anima": {
+            "auc": 0.996109437751004,
+            "detection_rate": 0.875,
+            "n_val": 8,
+            "n_train_removed": 54
+          },
+          "flux1": {
+            "auc": 0.9630457313123462,
+            "detection_rate": 0.5806451612903226,
+            "n_val": 31,
+            "n_train_removed": 211
+          },
+          "glide": {
+            "auc": 0.9996694093446958,
+            "detection_rate": 0.9939024390243902,
+            "n_val": 164,
+            "n_train_removed": 1275
+          },
+          "grok": {
+            "auc": 0.9801706827309237,
+            "detection_rate": 0.75,
+            "n_val": 4,
+            "n_train_removed": 27
+          },
+          "hidream": {
+            "auc": 0.9759036144578312,
+            "detection_rate": 0.5,
+            "n_val": 4,
+            "n_train_removed": 27
+          },
+          "imagen": {
+            "auc": 0.9651104417670683,
+            "detection_rate": 0.5,
+            "n_val": 4,
+            "n_train_removed": 27
+          },
+          "kolors": {
+            "auc": 0.9972389558232931,
+            "detection_rate": 1.0,
+            "n_val": 4,
+            "n_train_removed": 27
+          },
+          "playground": {
+            "auc": 0.9997489959839357,
+            "detection_rate": 1.0,
+            "n_val": 4,
+            "n_train_removed": 27
+          },
+          "qwen": {
+            "auc": 0.9893574297188755,
+            "detection_rate": 0.8,
+            "n_val": 5,
+            "n_train_removed": 27
+          },
+          "sd1": {
+            "auc": 0.9988988210908148,
+            "detection_rate": 0.989247311827957,
+            "n_val": 186,
+            "n_train_removed": 1439
+          },
+          "sd2": {
+            "auc": 1.0,
+            "detection_rate": 1.0,
+            "n_val": 8,
+            "n_train_removed": 54
+          },
+          "sd3": {
+            "auc": 0.9984939759036144,
+            "detection_rate": 1.0,
+            "n_val": 4,
+            "n_train_removed": 27
+          },
+          "sdxl": {
+            "auc": 0.994967047677891,
+            "detection_rate": 0.9102564102564102,
+            "n_val": 78,
+            "n_train_removed": 512
+          },
+          "vqdm": {
+            "auc": 0.9588904398080125,
+            "detection_rate": 0.5609756097560976,
+            "n_val": 164,
+            "n_train_removed": 1277
+          },
+          "wukong": {
+            "auc": 0.9958859829562151,
+            "detection_rate": 0.9634146341463414,
+            "n_val": 164,
+            "n_train_removed": 1277
+          }
+        },
+        "mean_auc": 0.9874313524853312,
+        "min_auc": 0.9588904398080125,
+        "n_families_scored": 10
+      },
+      "dim": 5888,
+      "seconds": 58.1,
+      "backbone": "clip_vitl14"
+    },
+    "clip_vitb16_final": {
+      "cv": {
+        "cv_auc_by_C": {
+          "0.001": 0.9289656063699716,
+          "0.003": 0.9360912317268413,
+          "0.01": 0.9393320608697897,
+          "0.03": 0.940218184396618,
+          "0.1": 0.940586878767458,
+          "0.3": 0.9407623838878016
+        },
+        "best_C": 0.3,
+        "folds": 5
+      },
+      "val_auc": 0.931406348284705,
+      "lofo": {
+        "per_family": {
+          "adm": {
+            "auc": 0.8311110294837889,
+            "detection_rate": 0.5670731707317073,
+            "n_val": 164,
+            "n_train_removed": 1281
+          },
+          "anima": {
+            "auc": 0.9844377510040161,
+            "detection_rate": 1.0,
+            "n_val": 8,
+            "n_train_removed": 54
+          },
+          "flux1": {
+            "auc": 0.7856263764736365,
+            "detection_rate": 0.6129032258064516,
+            "n_val": 31,
+            "n_train_removed": 211
+          },
+          "glide": {
+            "auc": 0.9695979038103634,
+            "detection_rate": 0.9573170731707317,
+            "n_val": 164,
+            "n_train_removed": 1275
+          },
+          "grok": {
+            "auc": 0.6340361445783133,
+            "detection_rate": 0.25,
+            "n_val": 4,
+            "n_train_removed": 27
+          },
+          "hidream": {
+            "auc": 0.8627008032128514,
+            "detection_rate": 0.75,
+            "n_val": 4,
+            "n_train_removed": 27
+          },
+          "imagen": {
+            "auc": 0.8260542168674698,
+            "detection_rate": 0.5,
+            "n_val": 4,
+            "n_train_removed": 27
+          },
+          "kolors": {
+            "auc": 0.9415160642570282,
+            "detection_rate": 1.0,
+            "n_val": 4,
+            "n_train_removed": 27
+          },
+          "playground": {
+            "auc": 0.9156626506024096,
+            "detection_rate": 1.0,
+            "n_val": 4,
+            "n_train_removed": 27
+          },
+          "qwen": {
+            "auc": 0.8955823293172691,
+            "detection_rate": 0.6,
+            "n_val": 5,
+            "n_train_removed": 27
+          },
+          "sd1": {
+            "auc": 0.8845219588029538,
+            "detection_rate": 0.6720430107526881,
+            "n_val": 186,
+            "n_train_removed": 1439
+          },
+          "sd2": {
+            "auc": 0.9574548192771085,
+            "detection_rate": 1.0,
+            "n_val": 8,
+            "n_train_removed": 54
+          },
+          "sd3": {
+            "auc": 0.9088855421686746,
+            "detection_rate": 0.75,
+            "n_val": 4,
+            "n_train_removed": 27
+          },
+          "sdxl": {
+            "auc": 0.9119426423643291,
+            "detection_rate": 0.7692307692307693,
+            "n_val": 78,
+            "n_train_removed": 512
+          },
+          "vqdm": {
+            "auc": 0.771316975217945,
+            "detection_rate": 0.4329268292682927,
+            "n_val": 164,
+            "n_train_removed": 1277
+          },
+          "wukong": {
+            "auc": 0.8604111568224115,
+            "detection_rate": 0.6646341463414634,
+            "n_val": 164,
+            "n_train_removed": 1277
+          }
+        },
+        "mean_auc": 0.8852002942573822,
+        "min_auc": 0.771316975217945,
+        "n_families_scored": 10
+      },
+      "dim": 512,
+      "seconds": 15.2,
+      "backbone": "clip_vitb16"
+    },
+    "clip_vitb16_multi": {
+      "cv": {
+        "cv_auc_by_C": {
+          "0.001": 0.9945165329538375,
+          "0.003": 0.995274331243135,
+          "0.01": 0.9954737322655784,
+          "0.03": 0.9953380930940485,
+          "0.1": 0.9950660492004839,
+          "0.3": 0.9947565165726366
+        },
+        "best_C": 0.01,
+        "folds": 5
+      },
+      "val_auc": 0.9952359639360656,
+      "lofo": {
+        "per_family": {
+          "adm": {
+            "auc": 0.9528051229307473,
+            "detection_rate": 0.6646341463414634,
+            "n_val": 164,
+            "n_train_removed": 1281
+          },
+          "anima": {
+            "auc": 0.9996234939759036,
+            "detection_rate": 1.0,
+            "n_val": 8,
+            "n_train_removed": 54
+          },
+          "flux1": {
+            "auc": 0.8980761756704236,
+            "detection_rate": 0.5806451612903226,
+            "n_val": 31,
+            "n_train_removed": 211
+          },
+          "glide": {
+            "auc": 0.9968349005779215,
+            "detection_rate": 0.9634146341463414,
+            "n_val": 164,
+            "n_train_removed": 1275
+          },
+          "grok": {
+            "auc": 0.8948293172690763,
+            "detection_rate": 0.5,
+            "n_val": 4,
+            "n_train_removed": 27
+          },
+          "hidream": {
+            "auc": 0.9279618473895582,
+            "detection_rate": 0.75,
+            "n_val": 4,
+            "n_train_removed": 27
+          },
+          "imagen": {
+            "auc": 0.9723895582329317,
+            "detection_rate": 0.75,
+            "n_val": 4,
+            "n_train_removed": 27
+          },
+          "kolors": {
+            "auc": 0.9894578313253012,
+            "detection_rate": 1.0,
+            "n_val": 4,
+            "n_train_removed": 27
+          },
+          "playground": {
+            "auc": 0.9977409638554218,
+            "detection_rate": 1.0,
+            "n_val": 4,
+            "n_train_removed": 27
+          },
+          "qwen": {
+            "auc": 0.9594377510040162,
+            "detection_rate": 0.6,
+            "n_val": 5,
+            "n_train_removed": 27
+          },
+          "sd1": {
+            "auc": 0.9947262166947359,
+            "detection_rate": 0.946236559139785,
+            "n_val": 186,
+            "n_train_removed": 1439
+          },
+          "sd2": {
+            "auc": 0.9948544176706827,
+            "detection_rate": 1.0,
+            "n_val": 8,
+            "n_train_removed": 54
+          },
+          "sd3": {
+            "auc": 0.9984939759036146,
+            "detection_rate": 1.0,
+            "n_val": 4,
+            "n_train_removed": 27
+          },
+          "sdxl": {
+            "auc": 0.9904875913912058,
+            "detection_rate": 0.8717948717948718,
+            "n_val": 78,
+            "n_train_removed": 512
+          },
+          "vqdm": {
+            "auc": 0.8664842296013322,
+            "detection_rate": 0.3475609756097561,
+            "n_val": 164,
+            "n_train_removed": 1277
+          },
+          "wukong": {
+            "auc": 0.9856193064942698,
+            "detection_rate": 0.8902439024390244,
+            "n_val": 164,
+            "n_train_removed": 1277
+          }
+        },
+        "mean_auc": 0.9638949206011238,
+        "min_auc": 0.8664842296013322,
+        "n_families_scored": 10
+      },
+      "dim": 4352,
+      "seconds": 100.6,
+      "backbone": "clip_vitb16"
+    },
+    "freq": {
+      "cv": {
+        "cv_auc_by_C": {
+          "0.001": 0.7385519596001278,
+          "0.003": 0.7435376234948157,
+          "0.01": 0.7483152119157346,
+          "0.03": 0.7502122732856206,
+          "0.1": 0.7504859293622287,
+          "0.3": 0.7504533808651982
+        },
+        "best_C": 0.1,
+        "folds": 5
+      },
+      "val_auc": 0.7484929678553571,
+      "lofo": {
+        "per_family": {
+          "adm": {
+            "auc": 0.7736311098050739,
+            "detection_rate": 0.6036585365853658,
+            "n_val": 164,
+            "n_train_removed": 1281
+          },
+          "anima": {
+            "auc": 0.6045431726907631,
+            "detection_rate": 0.25,
+            "n_val": 8,
+            "n_train_removed": 54
+          },
+          "flux1": {
+            "auc": 0.708997279440342,
+            "detection_rate": 0.6129032258064516,
+            "n_val": 31,
+            "n_train_removed": 211
+          },
+          "glide": {
+            "auc": 0.9833174160054853,
+            "detection_rate": 0.975609756097561,
+            "n_val": 164,
+            "n_train_removed": 1275
+          },
+          "grok": {
+            "auc": 0.6598895582329317,
+            "detection_rate": 0.5,
+            "n_val": 4,
+            "n_train_removed": 27
+          },
+          "hidream": {
+            "auc": 0.6912650602409638,
+            "detection_rate": 0.5,
+            "n_val": 4,
+            "n_train_removed": 27
+          },
+          "imagen": {
+            "auc": 0.5243473895582329,
+            "detection_rate": 0.25,
+            "n_val": 4,
+            "n_train_removed": 27
+          },
+          "kolors": {
+            "auc": 0.6664156626506024,
+            "detection_rate": 0.5,
+            "n_val": 4,
+            "n_train_removed": 27
+          },
+          "playground": {
+            "auc": 0.7520080321285141,
+            "detection_rate": 0.75,
+            "n_val": 4,
+            "n_train_removed": 27
+          },
+          "qwen": {
+            "auc": 0.5931726907630521,
+            "detection_rate": 0.4,
+            "n_val": 5,
+            "n_train_removed": 27
+          },
+          "sd1": {
+            "auc": 0.6630608455326683,
+            "detection_rate": 0.3118279569892473,
+            "n_val": 186,
+            "n_train_removed": 1439
+          },
+          "sd2": {
+            "auc": 0.8742469879518071,
+            "detection_rate": 0.75,
+            "n_val": 8,
+            "n_train_removed": 54
+          },
+          "sd3": {
+            "auc": 0.8165160642570282,
+            "detection_rate": 0.75,
+            "n_val": 4,
+            "n_train_removed": 27
+          },
+          "sdxl": {
+            "auc": 0.6960534445474206,
+            "detection_rate": 0.41025641025641024,
+            "n_val": 78,
+            "n_train_removed": 512
+          },
+          "vqdm": {
+            "auc": 0.5590104319717896,
+            "detection_rate": 0.3048780487804878,
+            "n_val": 164,
+            "n_train_removed": 1277
+          },
+          "wukong": {
+            "auc": 0.6217675580370262,
+            "detection_rate": 0.2682926829268293,
+            "n_val": 164,
+            "n_train_removed": 1277
+          }
+        },
+        "mean_auc": 0.7077800936745429,
+        "min_auc": 0.5590104319717896,
+        "n_families_scored": 10
+      },
+      "dim": 67,
+      "seconds": 4.2
+    },
+    "meta": {
+      "cv": {
+        "cv_auc_by_C": {
+          "0.001": 0.6112780136512089,
+          "0.003": 0.6112780136512089,
+          "0.01": 0.6112780136512089,
+          "0.03": 0.6112780136512089,
+          "0.1": 0.6112780136512089,
+          "0.3": 0.6112780136512089
+        },
+        "best_C": 0.001,
+        "folds": 5
+      },
+      "val_auc": 0.6046666586022806,
+      "lofo": {
+        "per_family": {
+          "adm": {
+            "auc": 0.6965055343324517,
+            "detection_rate": 0.3475609756097561,
+            "n_val": 164,
+            "n_train_removed": 1281
+          },
+          "anima": {
+            "auc": 0.5661395582329317,
+            "detection_rate": 0.5,
+            "n_val": 8,
+            "n_train_removed": 54
+          },
+          "flux1": {
+            "auc": 0.6623267262598782,
+            "detection_rate": 0.5161290322580645,
+            "n_val": 31,
+            "n_train_removed": 211
+          },
+          "glide": {
+            "auc": 0.8840024733078656,
+            "detection_rate": 0.16463414634146342,
+            "n_val": 164,
+            "n_train_removed": 1275
+          },
+          "grok": {
+            "auc": 0.7633032128514057,
+            "detection_rate": 1.0,
+            "n_val": 4,
+            "n_train_removed": 27
+          },
+          "hidream": {
+            "auc": 0.6774598393574297,
+            "detection_rate": 0.75,
+            "n_val": 4,
+            "n_train_removed": 27
+          },
+          "imagen": {
+            "auc": 0.2640562248995984,
+            "detection_rate": 0.0,
+            "n_val": 4,
+            "n_train_removed": 27
+          },
+          "kolors": {
+            "auc": 0.5436746987951807,
+            "detection_rate": 0.5,
+            "n_val": 4,
+            "n_train_removed": 27
+          },
+          "playground": {
+            "auc": 0.49096385542168675,
+            "detection_rate": 0.25,
+            "n_val": 4,
+            "n_train_removed": 27
+          },
+          "qwen": {
+            "auc": 0.5751004016064257,
+            "detection_rate": 0.6,
+            "n_val": 5,
+            "n_train_removed": 27
+          },
+          "sd1": {
+            "auc": 0.47958230772552574,
+            "detection_rate": 0.05913978494623656,
+            "n_val": 186,
+            "n_train_removed": 1439
+          },
+          "sd2": {
+            "auc": 0.40035140562248994,
+            "detection_rate": 0.375,
+            "n_val": 8,
+            "n_train_removed": 54
+          },
+          "sd3": {
+            "auc": 0.5456827309236948,
+            "detection_rate": 0.5,
+            "n_val": 4,
+            "n_train_removed": 27
+          },
+          "sdxl": {
+            "auc": 0.5508057872515704,
+            "detection_rate": 0.32051282051282054,
+            "n_val": 78,
+            "n_train_removed": 512
+          },
+          "vqdm": {
+            "auc": 0.5918950191007935,
+            "detection_rate": 0.25609756097560976,
+            "n_val": 164,
+            "n_train_removed": 1277
+          },
+          "wukong": {
+            "auc": 0.42395496620628853,
+            "detection_rate": 0.12195121951219512,
+            "n_val": 164,
+            "n_train_removed": 1277
+          }
+        },
+        "mean_auc": 0.583066417964622,
+        "min_auc": 0.40035140562248994,
+        "n_families_scored": 10
+      },
+      "dim": 12,
+      "seconds": 0.7
+    }
+  }
+}

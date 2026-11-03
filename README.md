@@ -34,7 +34,7 @@ scored once. Source: [`reports/RESULTS.md`](reports/RESULTS.md) and [`reports/me
   On `test` the figures are 98.7% and 98.7%.
 - **Shortcut audit:** a classifier that sees only file metadata (format, size, JPEG quality) reaches ROC-AUC 0.577 on
   `test_unseen` after our normalization, where 0.5 is chance. The model cannot win by reading file containers.
-- **CPU latency:** 243 ms median per 1024×1024 image (Apple M5 CPU, 2 threads). On the Hugging Face Space it is {{SPACE_LATENCY}}.
+- **CPU latency:** 243 ms median per 1024×1024 image (Apple M5 CPU, 2 threads). On the Hugging Face Space (ZeroGPU), model time is about 65 ms per image once warm. A full request takes about 4 s end to end, most of it ZeroGPU handing out a GPU slice, and about 8 s for the first request after the Space has been idle.
 
 ## The problem
 
@@ -59,7 +59,7 @@ apart by eye. Detectors that look great in papers often fail in practice, for th
   FFT of the analysed image, and 2–4 short reasons computed from measured quantities.
 - **Hard cases on purpose:** the example gallery includes a confident miss (Midjourney 6) and an abstention (a real DOCCI
   photo), so the demo shows both what the tool can do and where it fails.
-- **Runs on CPU** (Hugging Face Spaces). The app has a "How it works" tab with live metrics and a
+- **Runs anywhere:** live on Hugging Face Spaces with ZeroGPU (a GPU slice per request), and on a laptop CPU locally. The app has a "How it works" tab with live metrics and a
   "Limitations & responsible use" tab.
 
 ## Screenshots
@@ -322,8 +322,10 @@ degraded at full resolution is partly "cleaned" by the downscale, and these numb
 
 These numbers are from an Apple M5 CPU with `torch.set_num_threads(2)`; the model loads in 5.1 s. They were measured
 with the v1 weights; v2.1 has the same architecture and input size. PyTorch on Apple
-silicon uses Accelerate/AMX for matrix multiplies, so the ViT runs faster here than on a 2-vCPU x86 Space. Measured on
-the Space: {{SPACE_LATENCY}}. Each result in the app shows its own measured latency. The backbone cost benchmark that
+silicon uses Accelerate/AMX for matrix multiplies, so the ViT runs faster here than it would on a small x86 CPU. The live
+Space runs on Hugging Face ZeroGPU (a GPU slice per request). Measured on 2026-11-03 through the public API, warm model
+time was 63–65 ms per image (395 ms on a cold first call), and wall-clock time was about 4.2 s per request (8.4 s cold),
+including GPU allocation and upload. Each result in the app shows its own measured latency. The backbone cost benchmark that
 informed the choice is in [`reports/backbone_benchmark.md`](reports/backbone_benchmark.md).
 
 ### Figures
@@ -389,7 +391,7 @@ print(out["verdict"], round(out["prob_ai"], 3), out["models"], out["explanation"
 
 ```bash
 uv pip install --python .venv/bin/python -r requirements-train.txt
-.venv/bin/python -m pytest -q tests      # 13 tests, about 9 s
+.venv/bin/python -m pytest -q tests      # 14 tests, about 10 s
 ```
 
 The tests cover the inference contract, equivalence between the app's normalization and the data pipeline's, the

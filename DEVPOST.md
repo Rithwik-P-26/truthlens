@@ -82,8 +82,8 @@ Each detector is calibrated on validation data. The two are averaged with fixed 
 Nothing was tuned on the test sets. The app uses exactly the same preprocessing as the training data, so the reported
 numbers describe what users get.
 
-**Stack.** Python, PyTorch (Apple MPS for training, CPU for serving), open_clip, timm, scikit-learn, Hugging Face
-datasets, and Gradio on Hugging Face Spaces, with 13 pytest tests. We built TruthLens with Claude Code (Anthropic,
+**Stack.** Python, PyTorch (Apple MPS for training; ZeroGPU on Hugging Face and CPU locally for serving), open_clip, timm, scikit-learn, Hugging Face
+datasets, and Gradio on Hugging Face Spaces, with 14 pytest tests. We built TruthLens with Claude Code (Anthropic,
 Claude Opus 5.5) as an AI coding assistant: a lead agent coordinated sub-agents for data, modelling, the app and the
 docs. The human author chose the problem, directed the work and made the decisions.
 

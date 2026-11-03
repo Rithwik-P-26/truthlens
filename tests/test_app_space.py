@@ -71,3 +71,17 @@ def test_build_space(tmp_path):
     assert "timm/vit_large_patch14_clip_224.openai open_clip_model.safetensors" in readme
     attrs = (out / ".gitattributes").read_text()
     assert "*.safetensors filter=lfs" in attrs and "*.npz filter=lfs" in attrs
+    # ZeroGPU is the default target: Python 3.12, a ZeroGPU-supported torch from PyPI (no CPU index)
+    assert 'python_version: "3.12"' in readme and "suggested_hardware: zero-a10g" in readme
+    reqs = (out / "requirements.txt").read_text()
+    assert "torch==2.13.0" in reqs and "extra-index-url" not in reqs
+
+
+def test_build_space_cpu_variant(tmp_path):
+    from build_space import build
+
+    out = tmp_path / "space_cpu"
+    assert build(out, cpu=True) == 0
+    readme = (out / "README.md").read_text()
+    assert 'python_version: "3.11"' in readme and "zero-a10g" not in readme
+    assert (out / "requirements.txt").read_text() == (ROOT / "requirements.txt").read_text()

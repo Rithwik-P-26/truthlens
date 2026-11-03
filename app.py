@@ -6,7 +6,9 @@ Environment variables:
     PORT / GRADIO_SERVER_PORT  port to listen on (default 7860)
     TRUTHLENS_FORCE_STUB=1     always use the simulated detector (UI development)
     TRUTHLENS_CONFIG           model config in models/ (default config.json; config_fast.json = ViT-B/16, faster)
-    TRUTHLENS_DEVICE           torch device for the detector (default cpu, like the deployed Space)
+    TRUTHLENS_DEVICE           torch device for the detector (default cpu locally, cuda on ZeroGPU)
+    SPACES_ZERO_GPU            set by Hugging Face ZeroGPU hardware: models go to CUDA at startup and
+                               predictions run inside @spaces.GPU (15 s per image, up to 60 s per batch)
     TRUTHLENS_EXAMPLES_DIR     alternative examples folder (default: examples/)
     TRUTHLENS_METRICS          alternative metrics.json (default: reports/metrics.json)
 """
@@ -32,13 +34,25 @@ import numpy as np  # noqa: E402
 from truthlens import ui  # noqa: E402
 from truthlens.stub import StubDetector  # noqa: E402
 
+try:  # Hugging Face ZeroGPU: `spaces` is preinstalled there; locally it is usually absent
+    import spaces  # noqa: E402
+
+    GPU = spaces.GPU
+except ImportError:  # no-op stand-in so the same code runs on CPU/MPS
+    def GPU(fn=None, **_kwargs):
+        return fn if callable(fn) else (lambda f: f)
+
+# ZeroGPU sets SPACES_ZERO_GPU (read by the `spaces` package itself to enable the GPU decorator).
+ZERO_GPU = os.environ.get("SPACES_ZERO_GPU", "").lower() in ("1", "t", "true")
+
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
 log = logging.getLogger("truthlens.app")
 
 MODELS_DIR = ROOT / "models"
 CONFIG_NAME = os.environ.get("TRUTHLENS_CONFIG") or "config.json"  # e.g. config_fast.json (ViT-B/16, ~2x faster)
 CONFIG_PATH = MODELS_DIR / CONFIG_NAME
-DEVICE = os.environ.get("TRUTHLENS_DEVICE") or "cpu"  # the deployed Space is CPU-only; keep local runs identical
+# Local default is CPU (matches the evaluated latency); ZeroGPU places the models on CUDA at startup.
+DEVICE = os.environ.get("TRUTHLENS_DEVICE") or ("cuda" if ZERO_GPU else "cpu")
 METRICS_PATH = Path(os.environ.get("TRUTHLENS_METRICS") or ROOT / "reports" / "metrics.json")
 FIGURES_DIR = ROOT / "reports" / "figures"
 EXAMPLES_DIR = Path(os.environ.get("TRUTHLENS_EXAMPLES_DIR") or ROOT / "examples")
@@ -78,8 +92,17 @@ def load_detector():
         return StubDetector(), True, "Simulated results (forced by TRUTHLENS_FORCE_STUB).", cfg
     if CONFIG_PATH.is_file():
         try:
+            import torch
+
             from truthlens.inference import Detector
 
+            if DEVICE.startswith("cuda"):
+                # fp32 everywhere for parity with the evaluated pipeline (no TF32 shortcuts on Ampere+ GPUs)
+                torch.backends.cuda.matmul.allow_tf32 = False
+                torch.backends.cudnn.allow_tf32 = False
+            if ZERO_GPU:
+                # Outside @spaces.GPU there is no real GPU (CUDA is emulated), so skip the dummy warm-up pass.
+                Detector._warmup = lambda self: None
             t0 = time.perf_counter()
             det = Detector(models_dir=str(MODELS_DIR), device=DEVICE, config=CONFIG_NAME)
             log.info("Loaded Detector (%s, %s) in %.1fs", CONFIG_NAME, det.device, time.perf_counter() - t0)
@@ -132,9 +155,34 @@ log.info("Found %d example images (%d hard cases)", len(EXAMPLES), len(HARD_EXAM
 # --------------------------------------------------------------------------- handlers
 
 
+@GPU(duration=15)
+def _predict_gpu(im):
+    return DETECTOR.predict(im)
+
+
+def _batch_duration(images):
+    return min(60, 10 + len(images))
+
+
+@GPU(duration=_batch_duration)
+def _predict_many_gpu(images):
+    return [DETECTOR.predict(im) for im in images]
+
+
 def _predict(im):
+    """One prediction. On ZeroGPU this borrows a GPU for up to 15 s; locally it runs under a lock."""
+    if ZERO_GPU and not IS_STUB:
+        return _predict_gpu(im)
     with _LOCK:
         return DETECTOR.predict(im)
+
+
+def _predict_many(images):
+    """Batch predictions in ONE GPU allocation on ZeroGPU (cheaper on the daily quota than one call per image)."""
+    if ZERO_GPU and not IS_STUB:
+        return _predict_many_gpu(images)
+    with _LOCK:
+        return [DETECTOR.predict(im) for im in images]
 
 
 def analyze(path: str | None, opacity: float):
@@ -189,16 +237,28 @@ def run_batch(files, progress=gr.Progress()):
     paths = [f if isinstance(f, str) else getattr(f, "name", str(f)) for f in files][:MAX_BATCH]
     rows, model_names = [], []
     counts = {"AI-generated": 0, "Real": 0, "Uncertain": 0, "Error": 0}
-    for p in progress.tqdm(paths, desc="Analyzing"):
+    loaded = []  # (name, image or None)
+    for p in progress.tqdm(paths, desc="Reading images"):
         name = Path(p).name
         try:
-            im = ui.load_image(p, MAX_ANALYZE_SIDE)
-            res = _predict(im)
+            loaded.append((name, ui.load_image(p, MAX_ANALYZE_SIDE)))
         except Exception as e:
-            log.warning("Batch item failed (%s): %s", name, e)
+            log.warning("Batch item unreadable (%s): %s", name, e)
+            loaded.append((name, None))
+    progress(0.5, desc=f"Analyzing {sum(im is not None for _, im in loaded)} images")
+    good = [im for _, im in loaded if im is not None]
+    try:
+        results = iter(_predict_many(good)) if good else iter(())
+    except Exception:
+        log.exception("Batch prediction failed")
+        return None, ui.error_card("The detector raised an error on this batch.").replace("tl-card", "tl-card tl-sm"), \
+            gr.update(visible=False)
+    for name, im in loaded:
+        if im is None:
             counts["Error"] += 1
             rows.append({"File": name, "Verdict": "Error", "Note": "unreadable file"})
             continue
+        res = next(results)
         v = str(res.get("verdict", "Uncertain"))
         counts[v] = counts.get(v, 0) + 1
         row = {"File": name, "Verdict": v, "P(AI)": round(float(res["prob_ai"]), 4),

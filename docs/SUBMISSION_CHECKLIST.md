@@ -1,7 +1,7 @@
 # TruthLens submission checklist
 
 Deadline: **2026-11-04 18:30 GMT+4 (8:00 PM IST)**. Aim to submit by 17:30 GMT+4.
-Remaining placeholders (on purpose): `{{DEVPOST_URL}}` and `{{SPACE_LATENCY}}` in README.md.
+Remaining placeholder (on purpose): `{{DEVPOST_URL}}` in README.md.
 Find them with `grep -rn "{{" README.md DEVPOST.md LICENSE docs/`.
 
 ## Official requirements (checked against the files)
@@ -35,7 +35,7 @@ Find them with `grep -rn "{{" README.md DEVPOST.md LICENSE docs/`.
 - [x] Original work built during 2–4 November 2026; third-party datasets and pretrained models credited (README
       "Acknowledgements and citations", citations verified)
 - [x] Code license: `LICENSE` (MIT, Rithwik Ponnana); non-commercial data, examples and weights noted in README and LICENSE
-- [x] Tests: `.venv/bin/python -m pytest -q tests` (13 tests)
+- [x] Tests: `.venv/bin/python -m pytest -q tests` (14 tests)
 
 ## Manual steps for the human (agents do not run git, gh or Hugging Face commands)
 
@@ -48,7 +48,7 @@ Find them with `grep -rn "{{" README.md DEVPOST.md LICENSE docs/`.
 5. [ ] Upload `space/` to https://huggingface.co/spaces/Rith-P/truthlens.
 6. [ ] Open the Space and wait for the build. The first start downloads the 1.7 GB CLIP weights. Test one AI example,
        one real example and the hard cases; note the latency shown under a result.
-7. [ ] Replace `{{SPACE_LATENCY}}` in README.md (2 places) with the measured Space latency, e.g. "about N ms per image".
+7. [x] Replace `{{SPACE_LATENCY}}` in README.md (2 places) with the measured Space latency, e.g. "about N ms per image".
 8. [ ] Devpost:
        - create the project and paste the DEVPOST.md sections, tagline, elevator pitch and "Built with" tags;
        - add the GitHub and Space links;

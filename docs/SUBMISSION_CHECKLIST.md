@@ -1,8 +1,8 @@
 # TruthLens submission checklist
 
 Deadline: **2026-11-04 18:30 GMT+4 (8:00 PM IST)**. Aim to submit by 17:30 GMT+4.
-Remaining placeholder (on purpose): `{{DEVPOST_URL}}` in README.md.
-Find them with `grep -rn "{{" README.md DEVPOST.md LICENSE docs/`.
+No placeholders remain. The Devpost project is https://devpost.com/software/truthlens-eo9uf8.
+Check with `grep -rn "{{" README.md DEVPOST.md LICENSE docs/`.
 
 ## Official requirements (checked against the files)
 
@@ -30,8 +30,8 @@ Find them with `grep -rn "{{" README.md DEVPOST.md LICENSE docs/`.
 ### Project
 
 - [x] Python for all AI/ML parts (`src/truthlens/`, `scripts/`)
-- [ ] Working demo: the Space runs the **real model**, not demo mode (no "Demo mode" banner). Locally verified: the
-      screenshots and GIF use the real model (v2.1.0 on CPU).
+- [x] Working demo: the Space runs the **real model**, not demo mode (no "Demo mode" banner). Locally verified: the
+      screenshots and GIF use the real model (v2.1.0 on CPU), and the live Space returned real-model verdicts after the last upload.
 - [x] Original work built during 2–4 November 2026; third-party datasets and pretrained models credited (README
       "Acknowledgements and citations", citations verified)
 - [x] Code license: `LICENSE` (MIT, Rithwik Ponnana); non-commercial data, examples and weights noted in README and LICENSE
@@ -40,22 +40,22 @@ Find them with `grep -rn "{{" README.md DEVPOST.md LICENSE docs/`.
 ## Manual steps for the human (agents do not run git, gh or Hugging Face commands)
 
 1. [ ] Read README "Use of AI development tools" and confirm the wording about your role.
-2. [ ] Check `git status`. Nothing from `data/`, `logs/`, `models/cache/`, `space/`, `.claude/` or `TEAM_PLAN.md` should be
+2. [x] Check `git status`. Nothing from `data/`, `logs/`, `models/cache/`, `space/`, `.claude/` or `TEAM_PLAN.md` should be
        staged (all are gitignored). `models/*.safetensors` (16.2 MB), `docs/demo.gif` (6.5 MB) and `docs/screenshots/`
        **should** be committed.
-3. [ ] Commit and push to https://github.com/Rithwik-P-26/truthlens, and make the repository **public**.
-4. [ ] Build the Space with `.venv/bin/python scripts/build_space.py` and check its warnings.
-5. [ ] Upload `space/` to https://huggingface.co/spaces/Rith-P/truthlens.
-6. [ ] Open the Space and wait for the build. The first start downloads the 1.7 GB CLIP weights. Test one AI example,
+3. [x] Commit and push to https://github.com/Rithwik-P-26/truthlens, and make the repository **public**.
+4. [x] Build the Space with `.venv/bin/python scripts/build_space.py` and check its warnings.
+5. [x] Upload `space/` to https://huggingface.co/spaces/Rith-P/truthlens.
+6. [x] Open the Space and wait for the build. The first start downloads the 1.7 GB CLIP weights. Test one AI example,
        one real example and the hard cases; note the latency shown under a result.
 7. [x] Replace `{{SPACE_LATENCY}}` in README.md (2 places) with the measured Space latency, e.g. "about N ms per image".
-8. [ ] Devpost:
+8. [x] Devpost:
        - create the project and paste the DEVPOST.md sections, tagline, elevator pitch and "Built with" tags;
        - add the GitHub and Space links;
        - upload `docs/demo.gif` and a few screenshots as the gallery;
        - select Track 1 / FT-02.
-9. [ ] Put the Devpost project URL into README (`{{DEVPOST_URL}}`) and push again.
-10. [ ] Submit before **18:30 GMT+4 on 4 Nov**. Then check the public project page, and that every link opens while
+9. [x] Put the Devpost project URL into README and push again.
+10. [x] Submit before **18:30 GMT+4 on 4 Nov**. Then check the public project page, and that every link opens while
         logged out (repo public, Space public and running).
 
 ## Final review (Phase B)

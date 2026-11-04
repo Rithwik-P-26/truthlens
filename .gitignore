@@ -15,3 +15,4 @@ logs/
 .claude/
 .pytest_cache/
 models/archive_v1/
+devpost_upload/

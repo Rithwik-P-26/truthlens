@@ -18,6 +18,7 @@ format and resolution shortcuts that inflate many published results.
 
 - Demo: https://huggingface.co/spaces/Rith-P/truthlens
 - Code: https://github.com/Rithwik-P-26/truthlens
+- Devpost: https://devpost.com/software/truthlens-eo9uf8
 - Demo GIF and screenshots: in the README (`docs/demo.gif`). The live Space needs no login.
 
 ---

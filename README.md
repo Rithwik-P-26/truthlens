@@ -9,7 +9,7 @@ resolution shortcuts that inflate many published results.
 **Headline: on 32 never-seen generators, ROC-AUC 0.927 (a UnivFD-style baseline on the same data: 0.854) with
 only 3.2% of real photos flagged. On generators seen in training: 98.2% accuracy, ROC-AUC 0.998.**
 
-**Live demo:** https://huggingface.co/spaces/Rith-P/truthlens · **Code:** https://github.com/Rithwik-P-26/truthlens · **Devpost:** {{DEVPOST_URL}}
+**Live demo:** https://huggingface.co/spaces/Rith-P/truthlens · **Code:** https://github.com/Rithwik-P-26/truthlens · **Devpost:** https://devpost.com/software/truthlens-eo9uf8
 
 | | |
 |---|---|

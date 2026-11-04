@@ -35,7 +35,7 @@ Find them with `grep -rn "{{" README.md DEVPOST.md LICENSE docs/`.
 - [x] Original work built during 2–4 November 2026; third-party datasets and pretrained models credited (README
       "Acknowledgements and citations", citations verified)
 - [x] Code license: `LICENSE` (MIT, Rithwik Ponnana); non-commercial data, examples and weights noted in README and LICENSE
-- [x] Tests: `.venv/bin/python -m pytest -q tests` (14 tests)
+- [x] Tests: `.venv/bin/python -m pytest -q tests` (15 tests)
 
 ## Manual steps for the human (agents do not run git, gh or Hugging Face commands)
 

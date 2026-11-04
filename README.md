@@ -6,6 +6,9 @@
 **32 generators from families that never appear in training**, on a dataset cleaned of the file-format and
 resolution shortcuts that inflate many published results.
 
+**Headline: on 32 never-seen generators, ROC-AUC 0.927 (a UnivFD-style baseline on the same data: 0.854) with
+only 3.2% of real photos flagged. On generators seen in training: 98.2% accuracy, ROC-AUC 0.998.**
+
 **Live demo:** https://huggingface.co/spaces/Rith-P/truthlens · **Code:** https://github.com/Rithwik-P-26/truthlens · **Devpost:** {{DEVPOST_URL}}
 
 | | |
@@ -28,13 +31,16 @@ scored once. Source: [`reports/RESULTS.md`](reports/RESULTS.md) and [`reports/me
 | `test`: same generators as training | 1,192 / 1,192 | 0.982 | 0.998 (0.996–0.999) | 0.982 | 0.006 | 0.980 | 0.015 |
 | `test_unseen`: 32 held-out generators + a new real-photo domain | 2,663 / 2,663 | 0.798 | 0.927 (0.921–0.934) | 0.757 | 0.168 | 0.628 | 0.032 |
 
-- **Ranks well on unseen generators but misses some fakes.** On generators it never saw, ROC-AUC stays at 0.927, but
-  at the default threshold TruthLens catches 62.8% of the fakes. It wrongly flags 3.2% of real photos.
+- **Ranks well on unseen generators but misses about a third of fakes.** On generators it never saw, ROC-AUC stays at
+  0.927. Forced to answer at 0.5 (the table above), it catches 62.8% of fakes and wrongly flags 3.2% of real photos.
+  With the Uncertain band the app uses, 58.1% of unseen fakes get an *AI-generated* verdict, 9.6% get *Uncertain*, and
+  only 2.4% of real photos are called AI.
 - **Abstention:** on `test_unseen` it gives a verdict for 94.1% of images, and 81.6% of those verdicts are correct.
   On `test` the figures are 98.7% and 98.7%.
 - **Shortcut audit:** a classifier that sees only file metadata (format, size, JPEG quality) reaches ROC-AUC 0.577 on
   `test_unseen` after our normalization, where 0.5 is chance. The model cannot win by reading file containers.
-- **CPU latency:** 243 ms median per 1024×1024 image (Apple M5 CPU, 2 threads). On the Hugging Face Space (ZeroGPU), model time is about 65 ms per image once warm. A full request takes about 4 s end to end, most of it ZeroGPU handing out a GPU slice, and about 8 s for the first request after the Space has been idle.
+- **Latency:** 243 ms median per 1024×1024 image on a laptop CPU (Apple M5, 2 threads). On the live ZeroGPU Space:
+  about 65 ms model time, and about 4 s per request including GPU allocation (about 8 s after the Space has been idle).
 
 ## The problem
 
@@ -47,6 +53,15 @@ apart by eye. Detectors that look great in papers often fail in practice, for th
    sizes, so a classifier can score near 100% by reading the file format.
 3. **They give overconfident yes/no answers with no evidence.** That is dangerous when a wrong "fake" verdict can hurt a
    real person.
+
+## Who it is for
+
+- **Fact-checkers and newsrooms:** triage viral images before publishing. Few real photos are flagged (3.2% on
+  never-seen data), so an *AI-generated* flag is worth a closer look, and *Uncertain* routes the image to a human.
+- **Trust-and-safety and marketplace moderators:** batch-score up to 50 listing or profile photos and export a CSV.
+- **Insurance and claims reviewers:** an early screen for fabricated damage photos, alongside C2PA checks and reverse
+  image search.
+- **Everyday users:** a second opinion that shows its evidence instead of a bare yes or no.
 
 ## What TruthLens does
 
@@ -274,9 +289,8 @@ Our reading of the table:
 | Midjourney 6 | AI | 39 | 0.179 | 0.849 |
 | FLUX.2 klein 4B | AI | 34 | 0.088 | 0.720 |
 
-Shown: every unseen generator with n ≥ 100, plus the three easiest and the hardest with n ≥ 30. All 32 are listed
-in
-[`reports/RESULTS.md`](reports/RESULTS.md). Even the hardest families have AUC 0.72–0.85: the model ranks them above
+Shown: every unseen generator with n ≥ 100, plus the three easiest and the three hardest of the rest (n ≥ 30). All 32
+are listed in [`reports/RESULTS.md`](reports/RESULTS.md). Even the hardest families have AUC 0.72–0.85: the model ranks them above
 real photos more often than not, but its scores for them fall below the threshold.
 
 ### Abstention (selective prediction)
@@ -342,9 +356,11 @@ informed the choice is in [`reports/backbone_benchmark.md`](reports/backbone_ben
 
 ## Quickstart
 
-Requirements: macOS or Linux and Python 3.11. On first run the CLIP ViT-L/14 weights (about 1.7 GB,
-`timm/vit_large_patch14_clip_224.openai`) download from the Hugging Face Hub. The trained heads and the 16.2 MB CNN
-weights are in this repository under `models/`.
+Requirements: macOS or Linux and Python 3.11. With [uv](https://docs.astral.sh/uv/) (`curl -LsSf
+https://astral.sh/uv/install.sh | sh`), Python 3.11 is fetched automatically; the pip path needs `python3.11` on PATH
+(e.g. `brew install python@3.11` or `apt install python3.11 python3.11-venv`). The runtime environment is about
+1.4 GB. On first run the CLIP ViT-L/14 weights (about 1.7 GB, `timm/vit_large_patch14_clip_224.openai`) download from
+the Hugging Face Hub. The trained heads and the 16.2 MB CNN weights are in this repository under `models/`.
 
 ```bash
 git clone https://github.com/Rithwik-P-26/truthlens.git
@@ -372,7 +388,7 @@ tests need `requirements-train.txt` as well.
 |---|---|
 | `PORT` / `GRADIO_SERVER_PORT` | Port (default 7860) |
 | `TRUTHLENS_CONFIG=config_fast.json` | ViT-B/16 configuration, about 2× faster (unseen AUC 0.900 vs 0.927) |
-| `TRUTHLENS_DEVICE` | Torch device (default `cpu`, the same as the Space) |
+| `TRUTHLENS_DEVICE` | Torch device (default `cpu` locally; set to `cuda` automatically on the ZeroGPU Space) |
 | `TRUTHLENS_FORCE_STUB=1` | Simulated detector for UI work without weights (the app labels this "Demo mode") |
 
 Python API:
@@ -390,8 +406,8 @@ print(out["verdict"], round(out["prob_ai"], 3), out["models"], out["explanation"
 ### Tests
 
 ```bash
-uv pip install --python .venv/bin/python -r requirements-train.txt
-.venv/bin/python -m pytest -q tests      # 14 tests, about 10 s
+uv pip install --python .venv/bin/python -r requirements-train.txt   # or: .venv/bin/pip install -r requirements-train.txt
+.venv/bin/python -m pytest -q tests      # 15 tests, about 10 s once the CLIP weights are cached
 ```
 
 The tests cover the inference contract, equivalence between the app's normalization and the data pipeline's, the
@@ -463,7 +479,7 @@ assets/style.css           App styling
 | Area | Tools |
 |---|---|
 | Language | Python 3.11 |
-| Deep learning | PyTorch (Apple MPS for training, CPU for serving), torchvision |
+| Deep learning | PyTorch (Apple MPS for training; CPU locally and ZeroGPU/CUDA on the Space for serving), torchvision |
 | Pretrained models | [open_clip](https://github.com/mlfoundations/open_clip) (OpenAI CLIP ViT-L/14 and ViT-B/16), [timm](https://github.com/huggingface/pytorch-image-models) (ImageNet EfficientNet-B0) |
 | Classical ML | scikit-learn (logistic regression, cross-validation), NumPy, SciPy |
 | Data | Hugging Face `datasets` / `huggingface_hub` (streams parquet row groups), pandas, Pillow |
@@ -483,6 +499,13 @@ reverse image search and source verification.
 - **New generators.** On unseen families it misses more than a third of fakes at the default threshold (detection rate
   0.628), and some families are much harder: FLUX.2 klein 4B/9B and Midjourney 6 are caught at most 21% of the
   time. A future model can fool it.
+- **Prompts that ask for a real-photo look.** A generator told to imitate an amateur phone snapshot (grain, soft
+  focus, flat lighting, casual framing) removes the polished look the CLIP probe associates with AI and masks the pixel
+  traces the CNN looks for. In a manual test, a Gemini image made with a prompt asking it to look non-AI-generated was
+  called Real at 99%. Gemini's generator (Nano-Banana) is a held-out family, and only 17 of 31 Nano-Banana 2 and 8 of
+  11 Nano-Banana Pro test images are caught. Both members are fooled by the same look, so they
+  agree and the ensemble can be confidently wrong instead of Uncertain (see calibration shift below). Gemini images
+  carry Google's SynthID watermark, which TruthLens cannot read.
 - **Unfamiliar real photos.** 10.7% of DOCCI real photos, a domain never seen in training, are wrongly flagged as AI,
   against 0.6% of ImageNet photos. Errors are not evenly distributed across sources, cameras and content.
 - **Compression, blur and resizing.** JPEG recompression hides traces (more missed fakes). Blur and upsampling make real
@@ -543,6 +566,7 @@ used for training and evaluation come from the public datasets above; no new ima
 - Detect blur and upsampling and abstain on them, rather than only on images under 224 px.
 - Combine with provenance signals (C2PA manifests, invisible watermarks) when present, and localize partial edits.
 - Extend to video and face swaps. Distil the ensemble for faster CPU inference.
+- A browser extension and an API for newsroom and trust-and-safety workflows.
 
 ## Acknowledgements and citations
 

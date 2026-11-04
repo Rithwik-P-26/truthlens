@@ -27,6 +27,15 @@ def load_image(path: str, max_side: int = 4096) -> Image.Image:
     """Open an upload as RGB like the data pipeline: EXIF rotation, alpha onto white, cap huge images."""
     im = Image.open(path)
     im = ImageOps.exif_transpose(im)
+    if im.mode.startswith("I;16") or im.mode in ("I", "F"):
+        # 16-bit and float images: convert("RGB") would clip them to white, so rescale to 8 bit first
+        arr = np.asarray(im, dtype=np.float32)
+        mx = float(arr.max()) if arr.size else 0.0
+        if im.mode == "F" or mx > 65535:
+            hi = mx
+        else:
+            hi = 255.0 if mx <= 255 else 65535.0
+        im = Image.fromarray(np.clip(arr / (hi or 1.0) * 255.0, 0, 255).astype(np.uint8))
     if im.mode != "RGB":
         if im.mode in ("RGBA", "LA", "P"):
             im = im.convert("RGBA")

@@ -10,7 +10,7 @@ generator *families* that never appear in `train` or `val`.
   10 minutes on an idle machine, downloads about 13 GB of raw parquet, keeps about 0.9 GB of normalized JPEGs,
   and deletes the raw files in `--stage all`.
 * Stats and audit outputs: `data/meta/split_stats.json`, `data/meta/audit.json`, `data/meta/per_source_before.csv`.
-* **v2 (current): explicit-content filter + top-up** by `scripts/prepare_data_filter.py` (uses
+* **v2.1 (current): explicit-content filter + top-up** by `scripts/prepare_data_filter.py` (uses
   `scripts/prepare_data_nsfw.py`). The pre-filter manifest is kept as `data/meta/manifest_v1.csv`. See
   [Content filtering](#content-filtering-v2).
 
@@ -32,7 +32,7 @@ We searched the hub for other ungated candidates and rejected them:
 **Non-commercial only.** Every source is NC-licensed, so the dataset and anything trained on it are for research
 and demo use only.
 
-## Splits and counts (final, v2 after content filtering)
+## Splits and counts (final, v2.1 after content filtering)
 
 | split | real | AI | total | AI generators |
 |---|---:|---:|---:|---|
@@ -137,7 +137,7 @@ signals in sharpness and file size are partly genuine (generators produce smooth
 resampling effect, because different sources were downscaled by different factors. They give an AUC of only
 about 0.6, far from a shortcut.
 
-## Known limitations and advice for the model agent
+## Known limitations and advice for modelling
 
 * **Residual compression history.** Real photos were JPEG-compressed once before our re-encode, while most
   fakes were PNG. Downscaling by at least 1.14x breaks the 8x8 JPEG grid alignment but may not erase every trace.
@@ -171,7 +171,7 @@ v1 manifest images, all top-up candidates and the 12 gallery images. Real and AI
 | Signal | Model / rule | Threshold | Why this threshold |
 |---|---|---|---|
 | a. Image classifier | [`Falconsai/nsfw_image_detection`](https://huggingface.co/Falconsai/nsfw_image_detection) (ViT-B/16), p(nsfw) | **≥ 0.30** | The score is strongly bimodal. 24,514 of 24,840 v1 images score < 0.05 and 62 score > 0.95, with a thin, flat valley in between. 0.30 sits in that valley, below the classifier's 0.5 default, so it is moderately conservative. Lowering it to 0.2 adds only 28 images. |
-| b. CLIP concept check | [`CompVis/stable-diffusion-safety-checker`](https://huggingface.co/CompVis/stable-diffusion-safety-checker): its 17 NSFW concept embeddings and per-concept thresholds (plus 3 "special care" concepts), applied to CLIP ViT-L/14 image embeddings | max concept score **> 0** (the checker's own decision rule) | We verified that the checker's vision tower and projection are bit-identical to open_clip `ViT-L-14`/`openai` (`force_quick_gelu`). That let us reuse the model agent's cached embeddings (`models/cache/features/clip_vitl14.npz`) for v1 images and compute fresh ones for candidates. The checker is known to over-flag (skin, swimwear), which is acceptable for removal. |
+| b. CLIP concept check | [`CompVis/stable-diffusion-safety-checker`](https://huggingface.co/CompVis/stable-diffusion-safety-checker): its 17 NSFW concept embeddings and per-concept thresholds (plus 3 "special care" concepts), applied to CLIP ViT-L/14 image embeddings | max concept score **> 0** (the checker's own decision rule) | We verified that the checker's vision tower and projection are bit-identical to open_clip `ViT-L-14`/`openai` (`force_quick_gelu`). That let us reuse the cached training embeddings (`models/cache/features/clip_vitl14.npz`) for v1 images and compute fresh ones for candidates. The checker is known to over-flag (skin, swimwear), which is acceptable for removal. |
 | c. Prompt keywords | word-boundary regex of explicit terms (`KEYWORD_RE` in `scripts/prepare_data_nsfw.py`), applied to AI images only, since reals have no prompt | any match | Prompts are euphemistic, so this is only a backstop. |
 
 A zero-shot CLIP text-prompt score (explicit vs neutral prompts) was also computed. It is stored as
@@ -269,8 +269,7 @@ has path, split, label, source, every score and flag, and removed yes/no, with n
 are in `data/meta/filter_stats.json`.
 
 **Gallery (`examples/`):** all 12 images are clean (max p_falconsai 0.0004, max SD-checker score −0.001, no prompt
-flags). However, `ai_illustrious_squirrel_knight.jpg` comes from **illustrious, which is now a dropped generator**.
-The image itself is clean, but it is no longer in the manifest, so it cannot be cited as a `test_unseen` sample.
+flags), and all of them are in the current manifest.
 
 **Limitations of the filter:**
 
@@ -281,7 +280,8 @@ The image itself is clean, but it is no longer in the manifest, so it cannot be 
   reduces images of people in both classes.
 * The filter removed about twice as many AI as real images (10% vs 4.8%). Each cell was refilled to balance
   with clean images, but the remaining AI images are slightly less "skin-heavy" than before.
-* Thresholds were chosen from score distributions without manual image review, per the no-viewing policy.
+* Thresholds were chosen from score distributions, not by viewing images. The author then spot-checked the filtered
+  image folders by hand.
 
 ## Figures
 

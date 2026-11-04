@@ -164,9 +164,21 @@ def _batch_duration(images):
     return min(60, 10 + len(images))
 
 
+def _predict_list(images):
+    """Predict each image on its own, so one failure marks that row instead of losing the whole batch."""
+    out = []
+    for im in images:
+        try:
+            out.append(DETECTOR.predict(im))
+        except Exception:
+            log.exception("Batch item failed")
+            out.append(None)
+    return out
+
+
 @GPU(duration=_batch_duration)
 def _predict_many_gpu(images):
-    return [DETECTOR.predict(im) for im in images]
+    return _predict_list(images)
 
 
 def _predict(im):
@@ -182,7 +194,7 @@ def _predict_many(images):
     if ZERO_GPU and not IS_STUB:
         return _predict_many_gpu(images)
     with _LOCK:
-        return [DETECTOR.predict(im) for im in images]
+        return _predict_list(images)
 
 
 def analyze(path: str | None, opacity: float):
@@ -259,10 +271,14 @@ def run_batch(files, progress=gr.Progress()):
             rows.append({"File": name, "Verdict": "Error", "Note": "unreadable file"})
             continue
         res = next(results)
+        if res is None:
+            counts["Error"] += 1
+            rows.append({"File": name, "Verdict": "Error", "Note": "detector error"})
+            continue
         v = str(res.get("verdict", "Uncertain"))
         counts[v] = counts.get(v, 0) + 1
         row = {"File": name, "Verdict": v, "P(AI)": round(float(res["prob_ai"]), 4),
-               "Confidence": round(float(res.get("confidence", 0.0)), 4)}
+               "Confidence": "" if v == "Uncertain" else round(float(res.get("confidence", 0.0)), 4)}
         for m, mp in (res.get("models") or {}).items():
             if m not in model_names:
                 model_names.append(m)
@@ -279,7 +295,9 @@ def run_batch(files, progress=gr.Progress()):
     with open(csv_path, "w", newline="", encoding="utf-8") as f:
         w = csv.writer(f)
         w.writerow(headers)
-        w.writerows(table)
+        # a file name starting with = + - @ would run as a formula in Excel/Sheets, so quote it
+        w.writerows([["'" + c if isinstance(c, str) and c[:1] in ("=", "+", "-", "@") else c for c in r]
+                     for r in table])
 
     note = f" (first {MAX_BATCH} of {len(files)})" if len(files) > MAX_BATCH else ""
     summary = (

@@ -124,7 +124,7 @@ def normalize_image(img: Image.Image) -> tuple[Image.Image, tuple[int, int, int,
     Centre square crop (side = shorter side), Lanczos resize to 224x224, JPEG q95 (4:4:4)
     round trip. Returns ``(normalised RGB image, crop box in input coordinates, too_small)``;
     ``too_small`` flags inputs whose shorter side is below 256 px, which the training data
-    never contains (they are upscaled here, so predictions are less reliable).
+    never contains. Inputs below 224 px are upscaled here, and the detector calls them Uncertain.
     No EXIF transpose: the caller's orientation is kept so heatmaps align with its display.
     """
     data, box = _square_resize_jpeg(_flatten_like_dataset(img))

@@ -479,8 +479,9 @@ def write_results_md(metrics: dict, path: Path) -> None:
           "and was not selected after seeing test results.",
           "* Robustness numbers use a stratified subsample and perturb the 224 px normalised image. An upload "
           "degraded at full resolution is partly 'cleaned' by the downscale, so these numbers are conservative.",
-          "* CPU latency was measured on Apple silicon (AMX-accelerated matrix multiplies); a 2-vCPU x86 Space "
-          "is slower. `predict()` reports `latency_ms` live.",
+          "* CPU latency was measured on Apple silicon (AMX-accelerated matrix multiplies); a small x86 CPU "
+          "is slower. The live Space runs on ZeroGPU (measured numbers in the README). `predict()` reports "
+          "`latency_ms` live.",
           "* Calibration is fitted on VAL (seen generators). On unseen generators the probabilities are less "
           "reliable; see the test-unseen ECE and the reliability diagram."]
     L += ["", "## Figures", ""] + [f"![{p.stem}](figures/{p.name})" for p in sorted((path.parent / "figures").glob("*.png"))

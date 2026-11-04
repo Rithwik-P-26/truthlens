@@ -17,7 +17,8 @@ huggingface-hub==2.4.0
 datasets==5.1.0
 grad-cam==1.5.7
 tqdm==4.70.1
-pyflakes
+transformers==5.22.1  # scripts/prepare_data_nsfw.py (content filter)
+pyflakes==4.1.0
 # tests (tests/, run with: .venv/bin/python -m pytest -q)
 pytest==9.2.0
 playwright==1.64.1  # scripts/capture_media.py (also run: python -m playwright install chromium)

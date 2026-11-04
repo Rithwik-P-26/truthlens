@@ -183,8 +183,7 @@ def normalize_one(raw_bytes: bytes):
         return None, info
     left, top = (im.width - side) // 2, (im.height - side) // 2
     im = im.crop((left, top, left + side, top + side))
-    if True:  # always resample (side >= MIN_SIDE > OUT_SIZE)
-        im = im.resize((OUT_SIZE, OUT_SIZE), Image.Resampling.LANCZOS)
+    im = im.resize((OUT_SIZE, OUT_SIZE), Image.Resampling.LANCZOS)  # always a downscale: side >= MIN_SIDE > OUT_SIZE
     buf = io.BytesIO()
     im.save(buf, "JPEG", quality=JPEG_Q, subsampling=0, optimize=True)  # no exif/icc passed
     info["dhash"] = dhash64(im)
@@ -463,7 +462,6 @@ def stage_audit():
                                                    square=("aspect", lambda a: float((a.round(3) == 1).mean())))
     per_src.to_csv(META / "per_source_before.csv")
     # --- after normalization: file size / sharpness / color stats per class on final images
-    rs = random.Random(SEED)
     sample = full.sample(frac=1.0, random_state=SEED).groupby(["split", "label"]).head(400)
     feats = []
     for _, r in sample.iterrows():

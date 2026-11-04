@@ -18,7 +18,7 @@ format and resolution shortcuts that inflate many published results.
 
 - Demo: https://huggingface.co/spaces/Rith-P/truthlens
 - Code: https://github.com/Rithwik-P-26/truthlens
-- A demo video may be added later; the README has a demo GIF.
+- Demo GIF and screenshots: in the README (`docs/demo.gif`). The live Space needs no login.
 
 ---
 
@@ -83,7 +83,7 @@ Nothing was tuned on the test sets. The app uses exactly the same preprocessing 
 numbers describe what users get.
 
 **Stack.** Python, PyTorch (Apple MPS for training; ZeroGPU on Hugging Face and CPU locally for serving), open_clip, timm, scikit-learn, Hugging Face
-datasets, and Gradio on Hugging Face Spaces, with 14 pytest tests. We built TruthLens with Claude Code (Anthropic,
+datasets, and Gradio on Hugging Face Spaces, with 15 pytest tests. We built TruthLens with Claude Code (Anthropic,
 Claude Opus 5.5) as an AI coding assistant: a lead agent coordinated sub-agents for data, modelling, the app and the
 docs. The human author chose the problem, directed the work and made the decisions.
 
@@ -98,7 +98,7 @@ docs. The human author chose the problem, directed the work and made the decisio
   this rather than hide it, and use an "Uncertain" band.
 - **Robustness trade-offs.** JPEG recompression hides traces, while blur and upscaling make real photos look fake. That
   is why the app refuses to judge images under 224 px.
-- **Getting data within a weekend.** We streamed individual parquet row groups over HTTP instead of downloading
+- **Getting data within a three-day hackathon.** We streamed individual parquet row groups over HTTP instead of downloading
   multi-GB shards, and rejected datasets with unclear licenses.
 
 ## Accomplishments that we're proud of

@@ -196,7 +196,7 @@ Deployed: `clip_vitl14_multi`; rule: highest leave-one-family-out mean AUC on TR
 * Known failure modes from the robustness table: blur and upsampling make real photos look generated (ranking AUC stays high but the 0.5 threshold produces many false positives), and JPEG recompression hides generator traces (more missed fakes). Inputs smaller than 224 px are therefore answered with 'Uncertain' in the app; blur cannot be detected reliably and remains a limitation.
 * The pre-registered ensemble (equal-weight calibrated logits) is slightly below the CLIP probe alone on clean test sets, but more robust under JPEG compression. The stacked-LR row is shown for comparison only and was not selected after seeing test results.
 * Robustness numbers use a stratified subsample and perturb the 224 px normalised image. An upload degraded at full resolution is partly 'cleaned' by the downscale, so these numbers are conservative.
-* CPU latency was measured on Apple silicon (AMX-accelerated matrix multiplies); a 2-vCPU x86 Space is slower. `predict()` reports `latency_ms` live.
+* CPU latency was measured on Apple silicon (AMX-accelerated matrix multiplies); a small x86 CPU is slower. The live Space runs on ZeroGPU (measured numbers in the README). `predict()` reports `latency_ms` live.
 * Calibration is fitted on VAL (seen generators). On unseen generators the probabilities are less reliable; see the test-unseen ECE and the reliability diagram.
 
 ## Figures

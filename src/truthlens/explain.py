@@ -41,7 +41,7 @@ def heatmap_summary(heatmap: np.ndarray) -> dict:
     h, w = heatmap.shape
     total = float(heatmap.sum())
     peak = float(heatmap.max()) if heatmap.size else 0.0
-    if total <= 0:
+    if total <= 0 or h < 3 or w < 3:  # the 3x3 grid below needs at least 3 px per side
         return {"peak": 0.0, "concentration": 0.0, "region": None, "hot_fraction": 0.0}
     flat = np.sort(heatmap.ravel())[::-1]
     k = max(1, int(0.1 * flat.size))

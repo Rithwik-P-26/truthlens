@@ -38,6 +38,38 @@ def test_analyze_handler_on_example(app_module):
     assert app_module.analyze(None, 0.5)[0] == app_module.ui.empty_card()
 
 
+def test_batch_rows_and_16bit_upload(app_module, tmp_path, monkeypatch):
+    import numpy as np
+    from PIL import Image
+
+    g16 = tmp_path / "g16.png"
+    Image.fromarray(np.tile(np.linspace(0, 65535, 512), (512, 1)).astype(np.uint16)).save(g16)
+    assert 100 < np.asarray(app_module.ui.load_image(str(g16))).mean() < 160  # rescaled, not clipped to white
+    boom = tmp_path / "boom.png"
+    Image.new("RGB", (300, 300), (120, 80, 40)).save(boom)
+    bad = tmp_path / "bad.png"
+    bad.write_bytes(b"not an image")
+
+    def fake_predict(im):
+        if im.size == (300, 300):
+            raise RuntimeError("detector failure")
+        return {"verdict": "Uncertain", "prob_ai": 0.5, "confidence": 1.0, "models": {}, "latency_ms": 1.0}
+
+    class _Progress:
+        def tqdm(self, it, desc=None):
+            return it
+
+        def __call__(self, *a, **k):
+            pass
+
+    monkeypatch.setattr(app_module.DETECTOR, "predict", fake_predict)
+    table, summary, dl = app_module.run_batch([str(g16), str(bad), str(boom)], progress=_Progress())
+    rows = {r[0]: r for r in table["value"]}
+    assert rows["g16.png"][1] == "Uncertain" and rows["g16.png"][3] == ""  # no confidence shown when abstaining
+    assert rows["bad.png"][1] == "Error" and rows["boom.png"][1] == "Error"  # one failure does not sink the batch
+    assert dl["visible"]
+
+
 def test_metrics_page_renders_real_schema():
     from truthlens import ui
 
